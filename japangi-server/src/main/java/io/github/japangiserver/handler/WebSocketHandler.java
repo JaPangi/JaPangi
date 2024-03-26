@@ -41,7 +41,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private SocketResponse executeWithExceptionHandle(String payload) {
         try {
-            System.out.println(payload);
             SocketRequest request = objectMapper.readValue(payload, SocketRequest.class);
             BaseUseCase useCase = useCaseProvider.provide(request.type());
             return useCase.execute(request.data());
