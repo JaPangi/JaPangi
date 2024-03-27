@@ -10,15 +10,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "change")
+@Table(name = "changes")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 public class Change {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "change_id")
+    @Column(name = "changes_id")
     private Long changeId;
 
     @Column(name = "amount")
@@ -31,4 +30,11 @@ public class Change {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vendingmachine_id")
     private VendingMachine vendingMachine;
+
+    @Builder
+    public Change(Integer amount, Money money, VendingMachine vendingMachine) {
+        this.amount = amount;
+        this.money = money;
+        this.vendingMachine = vendingMachine;
+    }
 }

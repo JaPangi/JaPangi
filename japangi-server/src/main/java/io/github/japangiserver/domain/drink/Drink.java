@@ -24,4 +24,7 @@ public class Drink {
 
     @Column(name = "drink_price")
     private Integer drinkPrice;
+
+    @Column(name = "is_default")
+    private Boolean isDefault;
 }

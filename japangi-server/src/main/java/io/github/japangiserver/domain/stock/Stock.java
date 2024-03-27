@@ -13,9 +13,9 @@ import javax.persistence.*;
 @Table(name = "stock")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 public class Stock {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_id")
@@ -31,4 +31,11 @@ public class Stock {
 
     @Column(name = "amount")
     private Integer amount;
+
+    @Builder
+    public Stock(Drink drink, VendingMachine vendingMachine, Integer amount) {
+        this.drink = drink;
+        this.vendingMachine = vendingMachine;
+        this.amount = amount;
+    }
 }
