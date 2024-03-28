@@ -2,13 +2,66 @@ name: build and push to docker hub
 
 on:
   issue_comment:
-    types: [created, edited, deleted]
+    types: [created]
   
 jobs:
-  test:
-    if: ${{ startsWith(github.event.comment.body, '[test]') }}
+  build-server:
+    if: ${{ startsWith(github.event.comment.body, '[build]') }}
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./japangi-server
 
     steps:
-      - name: test
-        run: echo test
+      - uses: actions/checkout@v3
+
+      - name: login docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_EMAIL }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: gradle build server application
+        run: ./gradlew build -x test
+
+      - name: docker build and push to hub japangi server applicaiton
+        uses: docker/build-push-action@v3
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: wwan13/japangi-server:prod
+  
+  build-client:
+    if: ${{ startsWith(github.event.comment.body, '[build]') }}
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./japangi-client
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: login docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_EMAIL }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+    - name: install npm dependencies
+      run: npm install
+    
+    - name: gradle build client application
+        run: npm run build
+
+      - name: docker build and push to hub japangi client applicaiton
+        uses: docker/build-push-action@v3
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: wwan13/japangi-client:prod
