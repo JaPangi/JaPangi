@@ -27,7 +27,7 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: gradle build server application
+      - name: build server application
         run: ./gradlew build -x test
 
       - name: docker build and push to hub japangi server applicaiton
@@ -57,7 +57,7 @@ jobs:
     - name: install npm dependencies
       run: npm install
     
-    - name: gradle build client application
+    - name: build client application
       run: npm run build
 
     - name: docker build and push to hub japangi client applicaiton
