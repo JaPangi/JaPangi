@@ -38,4 +38,8 @@ public class Stock {
         this.vendingMachine = vendingMachine;
         this.amount = amount;
     }
+
+    public void removeAmount(){
+        this.amount-=1;
+    }
 }
