@@ -2,7 +2,7 @@ name: build and push to docker hub
 
 on:
   issue_comment:
-    types: [created]
+    types: [created, edited, deleted]
   
 jobs:
   build-server:
@@ -47,21 +47,21 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: login docker
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_EMAIL }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_EMAIL }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
       
     - name: install npm dependencies
       run: npm install
     
     - name: gradle build client application
-        run: npm run build
+      run: npm run build
 
-      - name: docker build and push to hub japangi client applicaiton
-        uses: docker/build-push-action@v3
-        with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: wwan13/japangi-client:prod
+    - name: docker build and push to hub japangi client applicaiton
+      uses: docker/build-push-action@v3
+      with:
+        context: ./
+        file: ./Dockerfile
+        push: true
+        tags: wwan13/japangi-client:prod
