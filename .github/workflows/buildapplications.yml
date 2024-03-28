@@ -8,8 +8,9 @@ jobs:
   build-server:
     if: ${{ startsWith(github.event.comment.body, '[build]') }}
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./japangi-server
+    defaults:
+      run:
+        working-directory: ./japangi-server
 
     steps:
       - uses: actions/checkout@v3
@@ -40,8 +41,9 @@ jobs:
   build-client:
     if: ${{ startsWith(github.event.comment.body, '[build]') }}
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./japangi-client
+    defaults:
+      run:
+        working-directory: ./japangi-client
 
     steps:
     - uses: actions/checkout@v3
