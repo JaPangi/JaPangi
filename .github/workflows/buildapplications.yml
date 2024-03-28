@@ -33,7 +33,6 @@ jobs:
       - name: docker build and push to hub japangi server applicaiton
         uses: docker/build-push-action@v3
         with:
-          context: ./
           file: ./Dockerfile
           push: true
           tags: wwan13/japangi-server:prod
@@ -63,7 +62,6 @@ jobs:
     - name: docker build and push to hub japangi client applicaiton
       uses: docker/build-push-action@v3
       with:
-        context: ./
         file: ./Dockerfile
         push: true
         tags: wwan13/japangi-client:prod
