@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,25 +23,9 @@ public class OrderService {
     private final ChangeProvider changeProvider;
 
     @Transactional
-    public int orderDrink(OrderTarget orderTarget, List<MoneyAmount> moneyAmounts) {
+    public List<MoneyAmount> orderDrink(OrderTarget orderTarget, List<MoneyAmount> moneyAmounts) {
         Drink drink = drinkRepository.findById(orderTarget.drinkId())
                 .orElseThrow(() -> new IllegalStateException("존재하지 않은 음료입니다"));
-
-        List<Change> changeList = changeRepository.findAllByVendingMachineVendingMachineId(orderTarget.vendingMachineId());
-        // [100 * 2 -> 200
-        // 500 * 1] -> 500
-        int totalInputPrice = moneyAmounts.stream()
-                .mapToInt(moneyAmount -> moneyAmount.value() * moneyAmount.amount())
-                .sum();
-
-        if(drink.getDrinkPrice()>totalInputPrice) {
-            throw new IllegalStateException("음료가격보다 낸 금액이 적습니다");
-        }
-
-        int changes = totalInputPrice - drink.getDrinkPrice();
-
-        changeProvider.provide(changes,changeList); // 거스름돈 돌려주는애
-
 
         Stock stock = stockRepository.findByDrinkDrinkIdAndVendingMachineVendingMachineId(
                         orderTarget.drinkId(),
@@ -50,7 +33,24 @@ public class OrderService {
                 )
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
 
+        List<Change> changeList = changeRepository.findAllByVendingMachineVendingMachineId(orderTarget.vendingMachineId());
+        TotalInput totalInput=new TotalInput(moneyAmounts); //일급컬렉션 적용
+        int totalPrice = totalInput.totalPrice(moneyAmounts);
+/*
+        int totalInputPrice = moneyAmounts.stream()
+                .mapToInt(moneyAmount -> moneyAmount.value() * moneyAmount.amount())
+                .sum();
+
+ */
+
+        if(drink.getDrinkPrice()>totalPrice) {
+            throw new IllegalStateException("음료가격보다 낸 금액이 적습니다");
+        }
+
+        int changes = totalPrice - drink.getDrinkPrice();
+
+        List<MoneyAmount> amounts = changeProvider.provide(changes, changeList);// 거스름돈 돌려주는애
         stock.removeAmount();
-        return stock.getAmount();
+        return amounts;
     }
 }
