@@ -27,4 +27,7 @@ public class Drink {
 
     @Column(name = "is_default")
     private Boolean isDefault;
+
+    @Column(name = "drink_img_url")
+    private String drinkImgUrl;
 }
