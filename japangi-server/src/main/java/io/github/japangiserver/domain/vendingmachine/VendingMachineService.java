@@ -4,6 +4,7 @@ import io.github.japangiserver.domain.change.Change;
 import io.github.japangiserver.domain.change.ChangeRepository;
 import io.github.japangiserver.domain.drink.DrinkRepository;
 import io.github.japangiserver.domain.money.MoneyRepository;
+import io.github.japangiserver.domain.order.OrderTarget;
 import io.github.japangiserver.domain.stock.Stock;
 import io.github.japangiserver.domain.stock.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,16 @@ public class VendingMachineService {
                     changeRepository.save(change);
                 });
         return vendingMachineId;
+    }
+
+    public void checkStock(OrderTarget orderTarget){
+        Stock stock = stockRepository.findByDrinkDrinkIdAndVendingMachineVendingMachineId(
+                        orderTarget.drinkId(),
+                        orderTarget.vendingMachineId()
+                )
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다"));
+
+        if(stock.getAmount()==0)
+            throw new IllegalStateException("재고가 부족합니다.");
     }
 }
