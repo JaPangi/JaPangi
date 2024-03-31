@@ -5,11 +5,10 @@ import io.github.japangiserver.domain.change.ChangeRepository;
 import io.github.japangiserver.domain.drink.DrinkRepository;
 import io.github.japangiserver.domain.drink.DrinkStatus;
 import io.github.japangiserver.domain.money.MoneyRepository;
-import io.github.japangiserver.domain.order.OrderTarget;
 import io.github.japangiserver.domain.stock.Stock;
 import io.github.japangiserver.domain.stock.StockRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +29,7 @@ public class VendingMachineService {
     public long init() {
         VendingMachine vendingMachine = new VendingMachine();
         Long vendingMachineId = vendingMachineRepository.save(vendingMachine).getVendingMachineId();
+
         drinkRepository.findAll()
             .forEach(drink -> {
                 Stock stock = Stock.builder()
@@ -49,16 +49,17 @@ public class VendingMachineService {
                     .build();
                 changeRepository.save(change);
             });
+
         return vendingMachineId;
     }
 
     public VendingMachineStatus getCurrentStatus(long vendingMachineId) {
-        List<Stock> stocks = stockRepository.findByVendingMachineVendingMachineId(
-            vendingMachineId
-        );
+        List<Stock> stocks = stockRepository.findByVendingMachineId(vendingMachineId);
+
         List<DrinkStatus> statusList = stocks.stream()
             .map(DrinkStatus::from)
             .toList();
+
         return new VendingMachineStatus(statusList);
     }
 }
