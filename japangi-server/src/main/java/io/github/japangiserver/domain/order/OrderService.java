@@ -64,7 +64,7 @@ public class OrderService {
             VendingMachineRequest vendingMachineRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        Map<String, Integer> collect = orderRepository.findAllByVendingMachineVendingMachineId(
+        Map<String, Integer> collect = orderRepository.findAllByVendingMachineId(
                         vendingMachineRequest.vendingMachineId()
                 )
                 .stream()
@@ -86,7 +86,7 @@ public class OrderService {
             VendingMachineRequest vendingMachineRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
-        Map<String, Integer> collect = orderRepository.findAllByVendingMachineVendingMachineId(
+        Map<String, Integer> collect = orderRepository.findAllByVendingMachineId(
                         vendingMachineRequest.vendingMachineId()
                 )
                 .stream()
