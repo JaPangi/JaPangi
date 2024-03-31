@@ -26,7 +26,7 @@ public class Stock {
     private Drink drink;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendingmachine_id")
+    @JoinColumn(name = "vending_machine_id")
     private VendingMachine vendingMachine;
 
     @Column(name = "amount")

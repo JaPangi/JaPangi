@@ -17,5 +17,5 @@ public class VendingMachine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vendingmachine_id")
-    private Long VendingMachineId;
+    private Long vendingMachineId;
 }
