@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")

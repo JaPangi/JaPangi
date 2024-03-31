@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DrinkService {
     private final DrinkRepository drinkRepository;
+
 }

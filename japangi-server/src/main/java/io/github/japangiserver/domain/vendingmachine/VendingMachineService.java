@@ -8,7 +8,6 @@ import io.github.japangiserver.domain.order.OrderTarget;
 import io.github.japangiserver.domain.stock.Stock;
 import io.github.japangiserver.domain.stock.StockRepository;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
