@@ -30,7 +30,7 @@ public class Order {
     private Drink drink;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_vendingmachine_id")
+    @JoinColumn(name = "vending_machine_id")
     private VendingMachine vendingMachine;
 
     @Column(name = "ordered_at")

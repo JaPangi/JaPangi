@@ -28,7 +28,7 @@ public class Change {
     private Money money;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendingmachine_id")
+    @JoinColumn(name = "vending_machine_id")
     private VendingMachine vendingMachine;
 
     @Builder
