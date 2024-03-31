@@ -13,16 +13,22 @@ import java.util.stream.IntStream;
 @Component
 public class ChangeProvider {
 
-    public MoneyAmounts provide(int changes, //거슬러 줘여할 돈
-                                     List<Change> changeList) { //지판기에 있는 거스름돈 현황
+    /**
+     * 거스름돈을 거슬러 주는 메소드
+     * @param excess 거슬러줘야 하는 금액
+     * @param changes 자판기가 보유하고 있는 거스름돈의 목록
+     * @return 거스름돈
+     */
+    public MoneyAmounts provide(int excess, List<Change> changes) {
 
-        changeList.sort(Comparator.comparing(change -> change.getMoney().getMoneyId())); //1 2 3 4 5
-        AtomicInteger remainingChanges = new AtomicInteger(changes);
-        List<MoneyAmount> moneyAmounts=new ArrayList<>();
+        changes.sort(Comparator.comparing(change -> change.getMoney().getMoneyId()));
 
-        IntStream.range(changeList.size(), 0)
+        AtomicInteger remainingChanges = new AtomicInteger(excess);
+        List<MoneyAmount> moneyAmounts = new ArrayList<>();
+
+        IntStream.range(changes.size(), 0)
                 .forEach(i -> {
-                    int value = changeList.get(i).getMoney().getValue();
+                    int value = changes.get(i).getMoney().getValue();
                     int changeAmount = remainingChanges.get() / value;
 
                     if (changeAmount > 0) {
@@ -34,6 +40,7 @@ public class ChangeProvider {
                         moneyAmounts.add(amount);
                     }
                 });
-       return new MoneyAmounts(moneyAmounts);
+
+        return new MoneyAmounts(moneyAmounts);
     }
 }

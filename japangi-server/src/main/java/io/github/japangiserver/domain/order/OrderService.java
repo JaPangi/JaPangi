@@ -31,16 +31,17 @@ public class OrderService {
     @Transactional
     public MoneyAmounts orderDrink(OrderTarget orderTarget, MoneyAmounts moneyAmounts) {
         Drink drink = drinkRepository.findById(orderTarget.drinkId())
-            .orElseThrow(() -> new IllegalStateException("존재하지 않은 음료입니다"));
+                .orElseThrow(() -> new IllegalStateException("존재하지 않은 음료입니다"));
 
-        Stock stock = stockRepository.findByDrinkDrinkIdAndVendingMachineVendingMachineId(
-                orderTarget.drinkId(),
+        Stock stock = stockRepository.findByDrinkIdAndVendingMachineId(
+                        orderTarget.drinkId(),
+                        orderTarget.vendingMachineId()
+                )
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
+
+        List<Change> changeList = changeRepository.findAllByVendingMachineId(
                 orderTarget.vendingMachineId()
-            )
-            .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
-
-        List<Change> changeList = changeRepository.findAllByVendingMachineVendingMachineId(
-            orderTarget.vendingMachineId());
+        );
 
         int totalPrice = moneyAmounts.calculateTotalPrice();
 
@@ -51,7 +52,7 @@ public class OrderService {
         int changes = totalPrice - drink.getDrinkPrice();
 
         stock.removeAmount();
-        return changeProvider.provide(changes, changeList);// 거스름돈 돌려주는애
+        return changeProvider.provide(changes, changeList);
     }
 
     /**
@@ -59,21 +60,21 @@ public class OrderService {
      * 전체 자판기 일별 매출
      */
     @Transactional(readOnly = true)
-    public List<OrderSalesResponse> DailyVendingMachineSales(
-        VendingMachineRequest vendingMachineRequest) {
+    public List<OrderSalesResponse> dailyVendingMachineSales(
+            VendingMachineRequest vendingMachineRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         Map<String, Integer> collect = orderRepository.findAllByVendingMachineVendingMachineId(
-                vendingMachineRequest.vendingMachineId()
-            )
-            .stream()
-            .collect(Collectors.groupingBy(order -> order.getOrderedAt().format(dateTimeFormatter),
-                Collectors.summingInt(orders -> orders.getDrink().getDrinkPrice())));
+                        vendingMachineRequest.vendingMachineId()
+                )
+                .stream()
+                .collect(Collectors.groupingBy(order -> order.getOrderedAt().format(dateTimeFormatter),
+                        Collectors.summingInt(orders -> orders.getDrink().getDrinkPrice())));
 
         return collect.entrySet().stream()
-            .map(order -> new OrderSalesResponse(order.getKey(), order.getValue()))
-            .sorted(Comparator.comparing(OrderSalesResponse::dateTime))
-            .collect(Collectors.toList());
+                .map(order -> new OrderSalesResponse(order.getKey(), order.getValue()))
+                .sorted(Comparator.comparing(OrderSalesResponse::dateTime))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -81,24 +82,20 @@ public class OrderService {
      * 전체 자판기 월별 매출
      */
     @Transactional(readOnly = true)
-    public List<OrderSalesResponse> MonthlyVendingMachineSales(
-        VendingMachineRequest vendingMachineRequest) {
+    public List<OrderSalesResponse> monthlyVendingMachineSales(
+            VendingMachineRequest vendingMachineRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
         Map<String, Integer> collect = orderRepository.findAllByVendingMachineVendingMachineId(
-                vendingMachineRequest.vendingMachineId()
-            )
-            .stream()
-            .collect(Collectors.groupingBy(order -> order.getOrderedAt().format(dateTimeFormatter),
-                Collectors.summingInt(orders -> orders.getDrink().getDrinkPrice())));
+                        vendingMachineRequest.vendingMachineId()
+                )
+                .stream()
+                .collect(Collectors.groupingBy(order -> order.getOrderedAt().format(dateTimeFormatter),
+                        Collectors.summingInt(orders -> orders.getDrink().getDrinkPrice())));
 
         return collect.entrySet().stream()
-            .map(order -> new OrderSalesResponse(order.getKey(), order.getValue()))
-            .sorted(Comparator.comparing(OrderSalesResponse::dateTime))
-            .collect(Collectors.toList());
+                .map(order -> new OrderSalesResponse(order.getKey(), order.getValue()))
+                .sorted(Comparator.comparing(OrderSalesResponse::dateTime))
+                .collect(Collectors.toList());
     }
-
-    /** NOTE
-     * 음료 별 일별 매출
-     */
 }
