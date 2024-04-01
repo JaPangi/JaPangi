@@ -37,4 +37,12 @@ public class Change {
         this.money = money;
         this.vendingMachine = vendingMachine;
     }
+
+    public void remainChange(Integer amount){
+        this.amount-=amount;
+    }
+    public void validChanges(Integer amount){
+        if(this.amount<amount)
+            throw new IllegalStateException("잔돈이 부족합니다");
+    }
 }
