@@ -11,13 +11,13 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     @Query(
             "select s from Stock s " +
-            "where s.drink.drinkId = :drinkId and s.vendingMachine.VendingMachineId = :vendingMachineId "
+            "where s.drink.drinkId = :drinkId and s.vendingMachine.vendingMachineId = :vendingMachineId "
     )
     Optional<Stock> findByDrinkIdAndVendingMachineId(
             @Param("drinkId") Long drinkId,
             @Param("vendingMachineId") Long vendingMachineId
     );
 
-    @Query("select s from Stock s where s.vendingMachine.VendingMachineId = :vendingMachineId ")
+    @Query("select s from Stock s where s.vendingMachine.vendingMachineId = :vendingMachineId ")
     List<Stock> findByVendingMachineId(@Param("vendingMachineId") Long vendingMachineId);
 }
