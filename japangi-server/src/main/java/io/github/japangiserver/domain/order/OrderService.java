@@ -7,7 +7,11 @@ import io.github.japangiserver.domain.drink.Drink;
 import io.github.japangiserver.domain.drink.DrinkRepository;
 import io.github.japangiserver.domain.stock.Stock;
 import io.github.japangiserver.domain.stock.StockRepository;
+import io.github.japangiserver.domain.vendingmachine.VendingMachine;
+import io.github.japangiserver.domain.vendingmachine.VendingMachineRepository;
 import io.github.japangiserver.domain.vendingmachine.VendingMachineRequest;
+import io.github.japangiserver.domain.vendingmachine.VendingMachineService;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +31,15 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ChangeRepository changeRepository;
     private final ChangeProvider changeProvider;
-
+    private final VendingMachineRepository vendingMachineRepository;
     @Transactional
     public MoneyAmounts orderDrink(OrderTarget orderTarget, MoneyAmounts moneyAmounts) {
         Drink drink = drinkRepository.findById(orderTarget.drinkId())
                 .orElseThrow(() -> new IllegalStateException("존재하지 않은 음료입니다"));
+
+        VendingMachine vendingMachine = vendingMachineRepository.findById(
+                orderTarget.vendingMachineId())
+            .orElseThrow(() -> new IllegalStateException("존재하지 않는 자판기입니다"));
 
         Stock stock = stockRepository.findByDrinkIdAndVendingMachineId(
                         orderTarget.drinkId(),
@@ -49,8 +57,13 @@ public class OrderService {
             throw new IllegalStateException("음료가격보다 낸 금액이 적습니다");
         }
 
-        int changes = totalPrice - drink.getDrinkPrice();
+        int changes = totalPrice - drink.getDrinkPrice(); //거스름톤
 
+        Order order = Order.builder()
+            .drink(drink)
+            .vendingMachine(vendingMachine)
+            .build();
+        orderRepository.save(order);
         stock.removeAmount();
         return changeProvider.provide(changes, changeList);
     }
