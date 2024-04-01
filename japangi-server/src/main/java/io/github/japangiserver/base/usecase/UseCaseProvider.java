@@ -1,11 +1,9 @@
 package io.github.japangiserver.base.usecase;
 
 import io.github.japangiserver.base.requesttype.Actor;
-import io.github.japangiserver.base.requesttype.RequestType;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
