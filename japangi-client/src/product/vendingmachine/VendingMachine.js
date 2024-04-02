@@ -1,6 +1,7 @@
 import { useState } from "react"
 import styled from "styled-components"
 import ReactModal from "react-modal"
+import DrinkPurchaseModal from "./DrinkPurchaseModal"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -184,9 +185,7 @@ export default function VendingMachine() {
                 </Button>
             </ButtonWrapper>
 
-            <ReactModal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyle}>
-                <ModalCloseButton onClick={closeModal}>X</ModalCloseButton>
-            </ReactModal>
+            <DrinkPurchaseModal isModalOpen={isModalOpen} closeModal={closeModal} />
         </Wrapper>
     )
 }
