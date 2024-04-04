@@ -23,9 +23,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	/* web socket */
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
 	/* test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
