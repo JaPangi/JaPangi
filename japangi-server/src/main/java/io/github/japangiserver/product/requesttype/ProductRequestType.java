@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ProductRequestType implements RequestType {
 
+    EXAMPLE("PRODUCT_EXAMPLE","exampleUseCase"),
     ADD_ITEM("PRODUCT_ADD_ITEM","addItemUseCase"),
     PURCHASE_ITEM("PRODUCT_PURCHASE_ITEM","purchaseItemUseCase");
+
     private final String name;
     private final String useCaseName;
 }
