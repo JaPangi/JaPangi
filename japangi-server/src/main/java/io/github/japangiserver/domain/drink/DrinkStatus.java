@@ -17,7 +17,7 @@ public record DrinkStatus(
             .drinkId(stock.getDrink().getDrinkId())
             .drinkName(stock.getDrink().getDrinkName())
             .drinkPrice(stock.getDrink().getDrinkPrice())
-            .drinkImageUrl(stock.getDrink().getDrinkImgUrl())
+            .drinkImageUrl(stock.getDrink().getDrinkImageUrl())
             .stock(stock.getAmount())
             .build();
     }
