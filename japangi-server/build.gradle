@@ -23,9 +23,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	/* web socket */
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
 	/* test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -34,6 +31,10 @@ dependencies {
 
 	/* mysql */
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	/* jackson */
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.5'
 }
 
 tasks.named('test') {
