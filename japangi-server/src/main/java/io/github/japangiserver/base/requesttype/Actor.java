@@ -14,8 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public enum Actor {
 
+    SYSTEM("SYSTEM_", List.of(SystemRequestType.values())),
     PRODUCT("PRODUCT_", List.of(ProductRequestType.values())),
-    ADMIN("ADMIN_", List.of(AdminRequestType.values())); // todo
+    ADMIN("ADMIN_", List.of(AdminRequestType.values()));
 
     private final String prefix;
     private final List<RequestType> types;

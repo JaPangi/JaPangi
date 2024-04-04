@@ -1,26 +1,29 @@
 package io.github.japangiserver.config;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
+import java.io.IOException;
+import java.net.ServerSocket;
 
 @Configuration
-@EnableWebSocket
-@RequiredArgsConstructor
-public class WebSocketConfig implements WebSocketConfigurer {
+public class WebSocketConfig {
 
-    private final WebSocketHandler webSocketHandler;
+    private final int socketPort;
 
-    @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry
-                .addHandler(
-                        webSocketHandler,
-                        "/ws"
-                )
-                .setAllowedOrigins("*");
+    public WebSocketConfig(
+            @Value("${socket.port}") int socketPort
+    ) {
+        this.socketPort = socketPort;
+    }
+
+    @Bean
+    public ServerSocket serverSocket() {
+        try {
+            return new ServerSocket(socketPort);
+        } catch (IOException e) {
+            throw new RuntimeException("cannot open socket server");
+        }
     }
 }

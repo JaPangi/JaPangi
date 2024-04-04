@@ -1,5 +1,7 @@
 package io.github.japangiserver.base.dto.response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.japangiserver.base.error.BusinessException;
 import lombok.RequiredArgsConstructor;
 
@@ -22,5 +24,13 @@ public abstract class SocketResponse {
 
     public static SocketErrorResponse error(String message) {
         return new SocketErrorResponse(ResponseStatus.ERROR, "GLOBAL_500", message);
+    }
+
+    public String serialize(ObjectMapper objectMapper) {
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("cannot serialize Response");
+        }
     }
 }
