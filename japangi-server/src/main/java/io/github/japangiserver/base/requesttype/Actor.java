@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public enum Actor {
 
-    SYSTEM("SYSTEM_", List.of(SystemRequestType.values())),
     PRODUCT("PRODUCT_", List.of(ProductRequestType.values())),
     ADMIN("ADMIN_", List.of(AdminRequestType.values()));
 
