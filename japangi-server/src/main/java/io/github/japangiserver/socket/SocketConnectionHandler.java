@@ -1,7 +1,5 @@
 package io.github.japangiserver.socket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.japangiserver.base.usecase.UseCaseProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -18,8 +16,8 @@ import java.net.Socket;
 public class SocketConnectionHandler implements ApplicationRunner {
 
     private final ServerSocket serverSocket;
-    private final UseCaseProvider useCaseProvider;
-    private final ObjectMapper objectMapper;
+    private final SocketConnectionPool connectionPool;
+    private final SocketMessageHandler messageHandler;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -33,10 +31,11 @@ public class SocketConnectionHandler implements ApplicationRunner {
             try {
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    SocketMessageHandler connection = new SocketMessageHandler(socket, useCaseProvider, objectMapper);
-                    connection.start();
+                    SocketConnection connection = SocketConnection.of(socket, messageHandler);
+                    connectionPool.add(connection);
                 }
             } catch (IOException e) {
+                connectionPool.closeAll();
                 log.info("[:{}] Socket closed", serverSocket.getLocalPort());
             }
         };

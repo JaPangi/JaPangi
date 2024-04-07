@@ -4,51 +4,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.japangiserver.base.dto.request.SocketRequest;
 import io.github.japangiserver.base.dto.response.SocketResponse;
 import io.github.japangiserver.base.error.BusinessException;
-import io.github.japangiserver.base.usecase.BaseUseCase;
-import io.github.japangiserver.base.usecase.UseCaseProvider;
-import lombok.Getter;
+import io.github.japangiserver.base.usecase.UseCaseExecutor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.function.Supplier;
 
-@Getter
+@Component
+@RequiredArgsConstructor
 @Slf4j
-public class SocketMessageHandler extends AbstractSocketHandler {
+public class SocketMessageHandler {
 
-    private final UseCaseProvider useCaseProvider;
+    private final UseCaseExecutor useCaseExecutor;
     private final ObjectMapper objectMapper;
 
-    public SocketMessageHandler(
-            Socket client,
-            UseCaseProvider useCaseProvider,
-            ObjectMapper objectMapper
-    ) throws IOException {
-        super(client);
-        this.useCaseProvider = useCaseProvider;
-        this.objectMapper = objectMapper;
-    }
-
-    @Override
-    void afterConnectionEstablished() throws IOException {
-        log.info("{} has joined server", connection.getRemoteSocketAddress().toString());
-    }
-
-    @Override
-    public void handleSocketMessage(String message) throws IOException {
-        if (isExit(message)) {
-            quit();
-            return;
-        }
-        executeAndWriteResponse(() -> {
+    void handleSocketMessage(String message, SocketConnection connection) {
+        executeAndWriteResponse(connection, () -> {
             SocketRequest request = SocketRequest.deserializeFrom(message, objectMapper);
-            BaseUseCase useCase = useCaseProvider.provide(request.type());
-            return useCase.execute(request.data());
+            return useCaseExecutor.execute(request);
         });
     }
 
-    private void executeAndWriteResponse(Supplier<SocketResponse> action) throws IOException {
+    private void executeAndWriteResponse(
+            SocketConnection connection,
+            Supplier<SocketResponse> action
+    ) {
         SocketResponse response = null;
         try {
             response = action.get();
@@ -59,16 +40,7 @@ public class SocketMessageHandler extends AbstractSocketHandler {
             log.error(e.getMessage());
             response = SocketResponse.error(e.getMessage());
         } finally {
-            write(response.serialize(objectMapper));
+            connection.write(response.serialize(objectMapper));
         }
-    }
-
-    private boolean isExit(String message) {
-        return message.contains("SYSTEM_EXIT");
-    }
-
-    @Override
-    void afterConnectionClosed() throws IOException {
-        log.info("{} has left server", connection.getRemoteSocketAddress().toString());
     }
 }
