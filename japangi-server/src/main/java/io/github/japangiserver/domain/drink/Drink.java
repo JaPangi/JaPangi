@@ -29,5 +29,5 @@ public class Drink {
     private Boolean isDefault;
 
     @Column(name = "drink_img_url")
-    private String drinkImgUrl;
+    private String drinkImageUrl;
 }
