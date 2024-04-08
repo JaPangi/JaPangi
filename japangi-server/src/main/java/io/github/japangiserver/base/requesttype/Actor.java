@@ -14,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public enum Actor {
 
-    PRODUCT("PRODUCT_", List.of(ProductRequestType.values())),
-    ADMIN("ADMIN_", List.of(AdminRequestType.values()));
+    PRODUCT("PRODUCT_", RequestTypeBinarySearchTree.of(ProductRequestType.values())),
+    ADMIN("ADMIN_", RequestTypeBinarySearchTree.of(AdminRequestType.values()));
 
     private final String prefix;
-    private final List<RequestType> types;
+    private final RequestTypeBinarySearchTree requestTypeBinarySearchTree;
 
     public static RequestType getMatchedType(String typeName) {
         Actor actor = Arrays.stream(values())
@@ -26,9 +26,6 @@ public enum Actor {
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(GlobalErrorCode.INVALID_REQUEST_TYPE_PREFIX));
 
-        return actor.getTypes().stream()
-                .filter(it -> it.getName().equals(typeName))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException(GlobalErrorCode.REQUEST_TYPE_NOT_FOUND));
+        return actor.requestTypeBinarySearchTree.search(typeName);
     }
 }
