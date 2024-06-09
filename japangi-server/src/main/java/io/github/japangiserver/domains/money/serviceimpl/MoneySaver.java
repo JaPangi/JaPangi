@@ -1,7 +1,7 @@
 package io.github.japangiserver.domains.money.serviceimpl;
 
-import io.github.japangiserver.domains.money.MoneyEntity;
-import io.github.japangiserver.domains.money.MoneyType;
+import io.github.japangiserver.domains.money.persistence.entity.MoneyEntity;
+import io.github.japangiserver.domains.money.persistence.entity.MoneyType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

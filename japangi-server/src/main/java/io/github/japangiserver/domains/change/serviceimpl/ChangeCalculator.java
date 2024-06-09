@@ -1,17 +1,25 @@
 package io.github.japangiserver.domains.change.serviceimpl;
 
-import io.github.japangiserver.domains.change.ChangeEntity;
+import io.github.japangiserver.domains.change.Change;
+import io.github.japangiserver.domains.change.persistence.ChangeEntityReader;
+import io.github.japangiserver.domains.change.persistence.entity.ChangeEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class ChangeCalculator {
-
-    public void decreaseChange(ChangeEntity changeEntity, int changeAmount) {
+    private final ChangeEntityReader changeEntityReader;
+    @Transactional
+    public void decreaseChange(Change change, int changeAmount) {
+        ChangeEntity changeEntity = changeEntityReader.getChangeEntity(change);
         changeEntity.remainChange(changeAmount);
     }
 
-    public int calculatorChange(ChangeEntity changeEntity, int changeAmount, int excess, int value) {
-        decreaseChange(changeEntity,changeAmount);
+    @Transactional
+    public int calculatorChange(Change change, int changeAmount, int excess, int value) {
+        decreaseChange(change,changeAmount);
         excess -= value*changeAmount;
         return excess;
     }

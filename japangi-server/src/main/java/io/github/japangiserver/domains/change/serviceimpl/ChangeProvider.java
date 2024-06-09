@@ -1,14 +1,15 @@
 package io.github.japangiserver.domains.change.serviceimpl;
 
-import io.github.japangiserver.domains.change.ChangeEntity;
+import io.github.japangiserver.domains.change.Change;
 import io.github.japangiserver.domains.money.serviceimpl.MoneyAmountCreator;
-import io.github.japangiserver.domains.order.domain.MoneyAmount;
-import io.github.japangiserver.domains.order.domain.MoneyAmounts;
+import io.github.japangiserver.domains.order.MoneyAmount;
+import io.github.japangiserver.domains.order.MoneyAmounts;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,16 +26,17 @@ public class ChangeProvider {
      * @param excess 거슬러줘야 하는 금액
      * @return 거스름돈
      */
+    @Transactional
     public MoneyAmounts provide(int excess, Long vendingMachineId) { //2450 13
         List<MoneyAmount> moneyAmount = new ArrayList<>();
-        List<ChangeEntity> changeEntities = changeReader.getChange(vendingMachineId);
-        for (ChangeEntity changeEntity : changeEntities) {
-            int value = changeReader.getValue(changeEntity); //1000원
+        List<Change> change = changeReader.getChanges(vendingMachineId);
+        for (Change changeDomain : change) {
+            int value = changeReader.getValue(changeDomain); //1000원
             int changeAmount = excess / value; //6700 / 5000 = 2
-            changeValidator.checkChanges(changeEntity, changeAmount); //잔돈이 자판기에 남아있는지 확인
+            changeValidator.checkChanges(changeDomain, changeAmount); //잔돈이 자판기에 남아있는지 확인
 
             if (changeAmount > 0) {
-                excess = changeCalculator.calculatorChange(changeEntity, changeAmount, excess, value);
+                excess = changeCalculator.calculatorChange(changeDomain, changeAmount, excess, value);
                 MoneyAmount amount = moneyAmountCreator.getMoneyAmount(changeAmount, value);
                 moneyAmount.add(amount);
             }

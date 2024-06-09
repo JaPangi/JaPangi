@@ -1,13 +1,12 @@
 package io.github.japangiserver.domains.change.serviceimpl;
 
 
-import io.github.japangiserver.domains.change.ChangeEntity;
-import io.github.japangiserver.domains.money.MoneyEntity;
+import io.github.japangiserver.domains.change.Change;
+import io.github.japangiserver.domains.change.persistence.ChangeEntityReader;
+import io.github.japangiserver.domains.change.persistence.entity.ChangeEntity;
 import io.github.japangiserver.domains.money.serviceimpl.MoneyReader;
-import io.github.japangiserver.domains.order.domain.MoneyAmount;
-import io.github.japangiserver.domains.order.domain.MoneyAmounts;
-import io.github.japangiserver.domains.vendingmachine.VendingMachineEntity;
-import io.github.japangiserver.domains.vendingmachine.serviceimpl.VendingMachineReader;
+import io.github.japangiserver.domains.order.MoneyAmount;
+import io.github.japangiserver.domains.order.MoneyAmounts;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,23 +18,29 @@ public class ChangeUpdater {
 
     private final ChangeReader changeReader;
     private final MoneyReader moneyReader;
-    private final VendingMachineReader vendingMachineReader;
+    private final ChangeEntityReader changeEntityReader;
 
     @Transactional
     public void insertChange(Long vendingMachineId, MoneyAmounts moneyAmounts) {
         List<MoneyAmount> amounts = moneyAmounts.moneyAmounts();
-        VendingMachineEntity vendingMachineEntity = vendingMachineReader.getVendingMachine(vendingMachineId);
         for (MoneyAmount moneyAmount : amounts) {
-            MoneyEntity moneyEntity = moneyReader.getMoney(moneyAmount.value());
-            ChangeEntity changeEntity = changeReader.getChangeEntity(vendingMachineEntity, moneyEntity);
+            Long moneyId = moneyReader.getMoney(moneyAmount.value());
+            Change change = changeReader.getChange(vendingMachineId, moneyId);
+
+            ChangeEntity changeEntity = changeEntityReader.getChangeEntity(change);
             changeEntity.increaseAmount(moneyAmount.amount());
         }
     }
 
+    @Transactional
     public void collectChange(Long vendingMachineId) {
-        changeReader.getChange(vendingMachineId)
-            .stream().
-            filter(change -> change.getAmount() > 5)
-            .forEach(ChangeEntity::collectMoneyByAdmin);
+
+        changeReader.getChanges(vendingMachineId)
+            .stream()
+            .filter(change -> change.amount() > 5)
+            .forEach(change -> {
+                ChangeEntity changeEntity = changeEntityReader.getChangeEntity(change);
+                changeEntity.collectMoneyByAdmin();
+            });
     }
 }

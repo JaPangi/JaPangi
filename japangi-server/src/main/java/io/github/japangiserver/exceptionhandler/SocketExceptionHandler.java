@@ -12,6 +12,12 @@ public class SocketExceptionHandler {
         return SocketResponse.error("IllegalStateException", e.getMessage());
     }
 
+    @ExceptionHandler(support = IllegalArgumentException.class)
+    public SocketResponse handleIllegalArgumentException(IllegalArgumentException e){
+        return SocketResponse.error("IllegalArgumentException",e.getMessage());
+
+    }
+
     @ExceptionHandler(support = Exception.class)
     public SocketResponse handleDefaultException(Exception e) {
 
