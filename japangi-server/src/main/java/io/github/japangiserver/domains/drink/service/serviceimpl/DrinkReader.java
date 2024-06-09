@@ -24,7 +24,6 @@ public class DrinkReader {
                 drink.getDrinkPrice()
             ))
             .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
-
     }
 
     @Transactional(readOnly = true)
