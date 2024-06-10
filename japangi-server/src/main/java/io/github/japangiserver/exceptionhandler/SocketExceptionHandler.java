@@ -3,6 +3,9 @@ package io.github.japangiserver.exceptionhandler;
 import io.wwan13.dispatchersorvlet.sorvlet.annotation.ExceptionHandler;
 import io.wwan13.dispatchersorvlet.sorvlet.dto.response.SocketResponse;
 
+/** NOTE
+ * exception 처리 구현
+ */
 public class SocketExceptionHandler {
     @ExceptionHandler(support = IllegalStateException.class)
     public SocketResponse handleIllegalStateException(IllegalStateException e) {
