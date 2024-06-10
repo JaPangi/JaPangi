@@ -18,5 +18,6 @@ public class AdminEntityMapper {
             .password(domain.adminPassword().password())
             .authority(domain.authority())
             .build();
+
     }
 }
