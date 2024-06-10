@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 거스름돈 업데이트 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class ChangeUpdater {
@@ -20,6 +23,11 @@ public class ChangeUpdater {
     private final MoneyReader moneyReader;
     private final ChangeEntityReader changeEntityReader;
 
+    /** NOTE
+     * 거스름돈 추가 구현체
+     * @param vendingMachineId 추가할 자판기 Id(PK)
+     * @param moneyAmounts 추가할 화폐 양
+     */
     @Transactional
     public void insertChange(Long vendingMachineId, MoneyAmounts moneyAmounts) {
         List<MoneyAmount> amounts = moneyAmounts.moneyAmounts();
@@ -32,6 +40,10 @@ public class ChangeUpdater {
         }
     }
 
+    /** NOTE
+     * 자판기 별 거스름돈 수거 구현체
+     * @param vendingMachineId 수거할 자판기 Id(PK)
+     */
     @Transactional
     public void collectChange(Long vendingMachineId) {
 

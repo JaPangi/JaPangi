@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 거스름돈 제공 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -21,18 +24,18 @@ public class ChangeProvider {
     private final ChangeCalculator changeCalculator;
     private final MoneyAmountCreator moneyAmountCreator;
 
-    /**
-     * 거스름돈을 거슬러 주는 메소드
+    /** NOTE
+     * 거스름돈을 거슬러 주는 구현체
      * @param excess 거슬러줘야 하는 금액
      * @return 거스름돈
      */
     @Transactional
-    public MoneyAmounts provide(int excess, Long vendingMachineId) { //2450 13
+    public MoneyAmounts provide(int excess, Long vendingMachineId) {
         List<MoneyAmount> moneyAmount = new ArrayList<>();
         List<Change> change = changeReader.getChanges(vendingMachineId);
         for (Change changeDomain : change) {
-            int value = changeReader.getValue(changeDomain); //1000원
-            int changeAmount = excess / value; //6700 / 5000 = 2
+            int value = changeReader.getValue(changeDomain); //화폐 단위
+            int changeAmount = excess / value; //거스러줘야할 화폐의 양
             changeValidator.checkChanges(changeDomain, changeAmount); //잔돈이 자판기에 남아있는지 확인
 
             if (changeAmount > 0) {

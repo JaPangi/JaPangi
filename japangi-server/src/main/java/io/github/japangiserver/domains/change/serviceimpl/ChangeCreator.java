@@ -7,13 +7,20 @@ import io.github.japangiserver.domains.vendingmachine.persistence.repository.Ven
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-
+/** NOTE
+ * 거스름돈 생성 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class ChangeCreator {
     public final static int DEFAULT_AMOUNT = 10;
     private final VendingMachineRepository vendingMachineRepository;
 
+    /** NOTE
+     * 거스름돈 생성 구현체
+     * @param vendingMachineId 거스름돈을 생성할 자판기 Id(PK)
+     * @param money 화폐 entity
+     */
     public ChangeEntity createChange(
         Long vendingMachineId,
         MoneyEntity money
