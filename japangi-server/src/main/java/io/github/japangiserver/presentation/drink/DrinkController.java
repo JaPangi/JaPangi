@@ -7,6 +7,9 @@ import io.wwan13.dispatchersorvlet.sorvlet.annotation.SocketController;
 import io.wwan13.dispatchersorvlet.sorvlet.dto.response.SocketResponse;
 import lombok.RequiredArgsConstructor;
 
+/** NOTE
+ * 음료 기능 controller
+ */
 @SocketController
 @RequestMapping(key = "DRINK")
 @RequiredArgsConstructor
@@ -14,7 +17,8 @@ public class DrinkController {
     private final DrinkService drinkService;
 
     /** NOTE
-     * 음료 세부사항 정보 확인(가격, 이름)
+     * 음료 세부사항 정보 확인(가격, 이름) API
+     * @param drinkId 세부사항을 확인할 음료Id(PK)
      */
     @RequestMapping(key = "GET_{drinkId}")
     public SocketResponse findDrinkInfo(@KeyParameter Long drinkId){
