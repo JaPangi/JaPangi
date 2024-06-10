@@ -13,6 +13,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** NOTE
+ * 화폐 entity
+ */
 @Entity
 @Table(name = "money")
 @NoArgsConstructor
