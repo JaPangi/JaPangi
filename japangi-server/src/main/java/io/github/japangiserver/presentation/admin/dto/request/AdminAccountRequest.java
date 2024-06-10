@@ -8,6 +8,7 @@ public record AdminAccountRequest(String username, String password) {
 
     public Admin toAdmin(){
         return new Admin(
+            0L,
             username,
             new AdminPassword(password),
             Authority.ROLE_ADMIN);
