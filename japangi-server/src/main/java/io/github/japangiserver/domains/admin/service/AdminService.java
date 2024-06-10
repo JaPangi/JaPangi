@@ -2,12 +2,15 @@ package io.github.japangiserver.domains.admin.service;
 
 import io.github.japangiserver.domains.admin.Admin;
 import io.github.japangiserver.domains.admin.AdminPassword;
+import io.github.japangiserver.domains.admin.NewPassword;
 import io.github.japangiserver.domains.admin.service.serviceimpl.AdminCreator;
+import io.github.japangiserver.domains.admin.service.serviceimpl.AdminReader;
 import io.github.japangiserver.domains.admin.service.serviceimpl.AdminUpdater;
 import io.github.japangiserver.domains.admin.service.serviceimpl.AdminValidator;
 import io.github.japangiserver.domains.change.serviceimpl.ChangeUpdater;
 import io.github.japangiserver.domains.drink.Drink;
 import io.github.japangiserver.domains.drink.service.serviceimpl.DrinkUpdater;
+import io.github.japangiserver.presentation.admin.dto.response.AdminResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,11 +38,17 @@ public class AdminService {
     /** NOTE
      * 관리자 비밀번호 수정 서비스
      * @param adminId 변경할 관리자 Id(PK)
-     * @param adminPassword 변경할 비밀번호
+     * @param adminPassword  기존 비밀번호
+     * @param newPassword 변경할 비밀번호
      */
-    public Long editAdmin(Long adminId, AdminPassword adminPassword) {
-        adminValidator.validPassword(adminPassword.password());
-        adminUpdater.updatePassword(adminId,adminPassword.password());
+    public Long editAdmin(
+        Long adminId,
+        AdminPassword adminPassword,
+        NewPassword newPassword
+    ) {
+        adminValidator.findAdminAccount(adminId,adminPassword.password());
+        adminValidator.validPassword(newPassword.newPassword());
+        adminUpdater.updatePassword(adminId,newPassword.newPassword());
         return adminId;
     }
 
@@ -65,7 +74,11 @@ public class AdminService {
      * 관리자 로그인 서비스
      * @param admin admin domain
      */
-    public String loginAdmin(Admin admin) {
-        return adminValidator.processLogin(admin);
+    public AdminResponse loginAdmin(Admin admin) {
+        Admin adminDomain = adminValidator.processLogin(admin);
+        return AdminResponse.builder()
+            .adminId(adminDomain.adminId())
+            .username(adminDomain.username())
+            .build();
     }
 }

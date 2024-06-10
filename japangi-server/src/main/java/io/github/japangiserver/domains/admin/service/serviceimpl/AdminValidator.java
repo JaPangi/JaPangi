@@ -33,6 +33,18 @@ public class AdminValidator {
     }
 
     /** NOTE
+     * 관리자가 입력한 비밀번호가 일치하는지 확인하는 구현체
+     * @param adminId 관리자 Id(PK)
+     * @param password 비말번호
+     */
+    public void findAdminAccount(Long adminId, String password){
+        if(!adminRepository.existsByAdminIdAndPassword(adminId,password)){
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다!");
+        }
+
+    }
+
+    /** NOTE
      * 괸리자 계정 유무 확인 구현체
      * @param username 검사할 관리자 이름
      */
@@ -70,14 +82,13 @@ public class AdminValidator {
      * @param admin admin domain
      */
     @Transactional(readOnly = true)
-    public String processLogin(Admin admin) {
+    public Admin processLogin(Admin admin) {
         checkLogin(admin.username(), admin.adminPassword().password());
-        Admin adminDomain = adminRepository.findByUsernameAndPassword(
+        return adminRepository.findByUsernameAndPassword(
                 admin.username(),
                 admin.adminPassword().password()
             )
             .map(Admin::fromEntity)
             .orElseThrow(() -> new IllegalStateException("존재하지 않는 관리자입니다!"));
-        return adminDomain.username();
     }
 }

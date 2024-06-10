@@ -24,6 +24,7 @@ public class AdminReader {
     public Admin findAdmin(Long adminId){
         return adminRepository.findById(adminId)
             .map(admin -> new Admin(
+                adminId,
                 admin.getUsername(),
                 new AdminPassword(admin.getPassword()),
                 Authority.ROLE_ADMIN
