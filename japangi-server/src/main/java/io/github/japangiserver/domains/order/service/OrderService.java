@@ -33,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 주문 핵심 비즈니스 service Layer
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -53,8 +56,8 @@ public class OrderService {
     private final OrderValidator orderValidator;
     private final OrderCalculator orderCalculator;
 
-    /** TODO
-     * domain으로 변경
+    /** NOTE
+     * 클라이언트의 주문을 처리하는 구현체
      */
     @Transactional
     public MoneyAmounts orderDrink(OrderTarget orderTarget, MoneyAmounts moneyAmounts) {
@@ -71,16 +74,16 @@ public class OrderService {
         );
 
         stockValidator.validStock(stock.amount()); //재고가 남아있는지 확인
-        //사용자가 넣은 잔돈 입금
-        changeUpdater.insertChange(vendingMachine.vendingMachineId(), moneyAmounts);
-        int totalPrice = moneyValidator.checkTotalCount(moneyAmounts); //3000
+
+        changeUpdater.insertChange(vendingMachine.vendingMachineId(), moneyAmounts); //사용자가 넣은 잔돈 입금
+        int totalPrice = moneyValidator.checkTotalCount(moneyAmounts);
 
         orderValidator.checkInputMoney(drink.drinkPrice(), totalPrice);
 
         int changes = orderCalculator.calculateChanges(totalPrice, drink.drinkPrice());
 
-        //거스름돈를 줄 수 있는지 검사
-        changeValidator.validInputMoney(changes, orderTarget.vendingMachineId());
+
+        changeValidator.validInputMoney(changes, orderTarget.vendingMachineId()); //거스름돈를 줄 수 있는지 검사
         orderSaver.saveOrder(drink.drinkInfo().drinkId(), vendingMachine.vendingMachineId());
 
         stockUpdater.updateRemoveAmount(
@@ -91,8 +94,7 @@ public class OrderService {
         return changeProvider.provide(changes, orderTarget.vendingMachineId());
     }
 
-    /**
-     * NOTE
+    /** NOTE
      * 각 자판기 각 음료별 일별/월별 매출
      */
     public List<MonthlyStatisticResponse> statisticsSales(
@@ -112,8 +114,7 @@ public class OrderService {
         return getStatistics(monthFormatter, dailyStatisticResponses);
     }
 
-    /**
-     * NOTE
+    /** NOTE
      * 월별 매출 구하는 로직
      */
     private List<MonthlyStatisticResponse> getStatistics(

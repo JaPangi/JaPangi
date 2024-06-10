@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
+/** NOTE
+ * 일별/월별 통계 implement Layer
+ */
 @Component
 public class StatisticsCalculator {
 
@@ -51,6 +54,9 @@ public class StatisticsCalculator {
             .build();
     }
 
+    /** NOTE
+     * 월별 반환값 response 로직
+     */
     public MonthlyStatisticResponse getMonthlyStatistic(List<DailyStatisticsResponse> monthOrder) {
         return MonthlyStatisticResponse.builder()
             .dailyStatisticResponses(monthOrder)
@@ -61,8 +67,13 @@ public class StatisticsCalculator {
             .build();
     }
 
-    public List<MonthlyStatisticResponse> getMonthlyStatisticList(DateTimeFormatter monthFormatter,
-        List<DailyStatisticsResponse> dailyStatisticResponses) {
+    /** NOTE
+     * 월별 매출 구하는 로직
+     */
+    public List<MonthlyStatisticResponse> getMonthlyStatisticList(
+        DateTimeFormatter monthFormatter,
+        List<DailyStatisticsResponse> dailyStatisticResponses
+    ) {
         return dailyStatisticResponses.stream()
             .collect(Collectors.groupingBy(
                     daily -> LocalDate.parse(daily.date()).format(monthFormatter),

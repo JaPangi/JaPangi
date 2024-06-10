@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * order 저장 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class OrderSaver{
@@ -22,6 +25,12 @@ public class OrderSaver{
     private final VendingMachineReader vendingMachineReader;
     private final DrinkRepository drinkRepository;
     private final VendingMachineRepository vendingMachineRepository;
+
+    /** NOTE
+     * 주문 저장 구현체
+     * @param drinkId 주문한 음료 Id(PK)
+     * @param vendingMachineId 주문한 자판기 Id(PK)
+     */
     @Transactional
     public void saveOrder(Long drinkId, Long vendingMachineId){
         VendingMachine vendingMachine = vendingMachineReader.getVendingMachine(vendingMachineId);
@@ -30,6 +39,11 @@ public class OrderSaver{
         orderRepository.save(orderEntity);
     }
 
+    /** NOTE
+     * 주문 entity 생성 구현체
+     * @param drink drink domain
+     * @param vendingMachine vendingMachine domain
+     */
     public OrderEntity createOrder(Drink drink, VendingMachine vendingMachine){
         DrinkEntity drinkEntity = drinkRepository.findById(drink.drinkInfo().drinkId())
             .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));

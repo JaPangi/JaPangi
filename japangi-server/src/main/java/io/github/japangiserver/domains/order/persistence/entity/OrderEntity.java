@@ -12,6 +12,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/** NOTE
+ * 주문 entity
+ */
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor
