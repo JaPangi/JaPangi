@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/** NOTE
+ * 자판기 entity
+ */
 @Entity
 @Table(name = "vendingmachine")
 @NoArgsConstructor

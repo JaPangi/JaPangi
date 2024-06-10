@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 자판기 핵심 비즈니스 로직 service Layer
+ */
 @Service
 @RequiredArgsConstructor
 public class VendingMachineService {
@@ -24,6 +27,10 @@ public class VendingMachineService {
     private final ChangeSaver changeSaver;
     private final ChangeReader changeReader;
     private final StockReader stockReader;
+
+    /** NOTE
+     * 자판기 초기 셋팅 서비스
+     */
     @Transactional
     public long init() {
         Long vendingMachineId = vendingMachineSaver.saveVendingMachine();
@@ -34,14 +41,25 @@ public class VendingMachineService {
         return vendingMachineId;
     }
 
+    /** NOTE
+     * 현재 거스름돈 현황 조회 서비스
+     * @param vendingMachineId 자판기 Id(PK)
+     */
     public List<ChangeStatusResponse> showCurrentStatus(Long vendingMachineId) {
         return changeReader.getCurrentStatus(vendingMachineId);
     }
 
+    /** NOTE
+     * 자판기 목록 조회 서비스
+     */
     public List<VendingMachineResponse> showVendingMachines() {
         return vendingMachineReader.vendingMachineList();
     }
 
+    /** NOTE
+     * 자판기 재고 조회 서비스
+     * @param vendingMachineId 자판기 Id(PK)
+     */
     public List<StockStatusResponse> showCurrentStockStatus(Long vendingMachineId) {
         return stockReader.getCurrentStockStatus(vendingMachineId);
     }
