@@ -9,17 +9,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 관리자 생성 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class AdminCreator {
     private final AdminRepository adminRepository;
 
+    /** NOTE
+     * 관리자 회원가입 구현체
+     * @param admin admin domain
+     */
     @Transactional
     public Long createAdminEntity(Admin admin) {
         AdminEntity adminEntity = toEntityFromDomain(admin);
         return saveAdmin(adminEntity);
     }
 
+    /** NOTE
+     * 관리자 entity 저장 구현체
+     * @param adminEntity 관리자 entity
+     */
     @Transactional
     public Long saveAdmin(AdminEntity adminEntity){
         return adminRepository.save(adminEntity).getAdminId();

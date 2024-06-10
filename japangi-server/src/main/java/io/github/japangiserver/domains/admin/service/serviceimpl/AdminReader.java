@@ -8,11 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 관리자 조회 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class AdminReader {
     private final AdminRepository adminRepository;
 
+    /** NOTE
+     * 관리자 domain 조회 구현체
+     * @param adminId 조회하려는 관리자 Id(PK)
+     */
     @Transactional(readOnly = true)
     public Admin findAdmin(Long adminId){
         return adminRepository.findById(adminId)

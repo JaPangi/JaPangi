@@ -14,6 +14,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** NOTE
+ * 관리자 entity
+ */
 @Entity
 @Table(name = "admin")
 @NoArgsConstructor

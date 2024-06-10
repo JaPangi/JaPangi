@@ -7,11 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * 관리자 수정 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class AdminUpdater {
     private final AdminReader adminReader;
     private final AdminRepository adminRepository;
+
+    /** NOTE
+     * 관리자 비말번호 수정 구현체
+     * @param adminId 수정하려는 관리자 Id(PK)
+     * @param password 수정할 비밀번호
+     */
     @Transactional
     public void updatePassword(Long adminId, String password) {
         Admin admin = adminReader.findAdmin(adminId);
