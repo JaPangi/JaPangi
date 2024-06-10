@@ -10,12 +10,21 @@ import io.github.japangiserver.domains.vendingmachine.persistence.repository.Ven
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/** NOTE
+ * 재고 생성 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class StockCreator {
     public final static int DEFAULT_AMOUNT = 10;
     private final VendingMachineRepository  vendingMachineRepository;
     private final DrinkRepository drinkRepository;
+
+    /** NOTE
+     * 재고 entity 생성 구현체
+     * @param vendingMachineId 자판기 Id(PK)
+     * @param drink drink domain
+     */
     public StockEntity createStock(Long vendingMachineId, Drink drink){
         VendingMachineEntity vendingMachineEntity = vendingMachineRepository.findById(
                 vendingMachineId

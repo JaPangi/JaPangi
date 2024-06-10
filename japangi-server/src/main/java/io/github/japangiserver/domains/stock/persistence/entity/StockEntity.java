@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/** NOTE
+ * 재고 entity
+ */
 @Entity
 @Table(name = "stock")
 @NoArgsConstructor
