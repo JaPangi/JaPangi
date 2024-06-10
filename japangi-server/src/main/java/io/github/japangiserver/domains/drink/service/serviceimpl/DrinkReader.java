@@ -10,11 +10,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * drink 조회 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class DrinkReader {
     private final DrinkRepository drinkRepository;
 
+    /** NOTE
+     *
+     * @param drinkId
+     * @return
+     */
     @Transactional(readOnly = true)
     public Drink getDrink(Long drinkId){
         return drinkRepository.findById(drinkId)

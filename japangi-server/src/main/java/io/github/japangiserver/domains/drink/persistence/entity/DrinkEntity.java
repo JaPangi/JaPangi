@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/** NOTE
+ * 음료 entity
+ */
 @Entity
 @Table(name = "drink")
 @NoArgsConstructor

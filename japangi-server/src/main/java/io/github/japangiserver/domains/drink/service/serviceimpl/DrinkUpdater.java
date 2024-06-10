@@ -7,10 +7,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/** NOTE
+ * drink 수정 implement Layer
+ */
 @Component
 @RequiredArgsConstructor
 public class DrinkUpdater {
     private final DrinkRepository drinkRepository;
+
+    /** NOTE
+     * 음료 정보 수정 구현체
+     */
     @Transactional
     public void modifyDrink(Drink drink){
         DrinkEntity drinkEntity = drinkRepository.findById(drink.drinkInfo().drinkId())
