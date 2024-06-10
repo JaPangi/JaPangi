@@ -15,6 +15,7 @@ public class JapangiConfig implements SocketServerConfigurer {
 
     @Value(value = "${spring.socket.port}")
     private int socketPort;
+
     /** NOTE
      * Socket 포트 지정
      */
