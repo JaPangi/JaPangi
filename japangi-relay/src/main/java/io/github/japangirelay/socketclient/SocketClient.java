@@ -2,9 +2,7 @@ package io.github.japangirelay.socketclient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -32,11 +30,6 @@ public class SocketClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String relayRequest(String message) {
-        writeMassage(message);
-        return readMassage();
     }
 
     public String readMassage() {
