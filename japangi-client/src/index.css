@@ -6,3 +6,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+body{
+  -ms-overflow-style: none;
+  }
+  
+ ::-webkit-scrollbar {
+   display: none;
+ }

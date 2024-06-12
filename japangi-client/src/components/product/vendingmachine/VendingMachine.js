@@ -1,7 +1,5 @@
-import { useState } from "react"
 import styled from "styled-components"
-import ReactModal from "react-modal"
-import DrinkPurchaseModal from "./DrinkPurchaseModal"
+import { useNavigate } from "react-router-dom"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -32,9 +30,8 @@ const Title = styled.p`
 
 const MenuWrapper = styled.div`
     width: 100%;
-    height: 74%;
+    height: 82%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     background-color: #ffffff;
@@ -42,17 +39,27 @@ const MenuWrapper = styled.div`
     padding: 50px;
     box-sizing: border-box;
     box-shadow: 2px 8px 12px rgba(1, 1, 1, 0.02);
+    overflow: scroll;
+    flex-direction: row;
 `
 
-const MenuElement = styled.div`
+const MenuElement = styled.button`
     width: 280px;
     height: 185px;
     border-radius: 10px;
-    border: 2px solid ${(props) => props.borderColor};
+    border: 2px solid #D3D3D3;
     padding: 15px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
+    transition: .2s ease;
+    background-color: #ffffff;
+    margin: 27px 14px 27px 14px;
+
+    &:hover {
+        border: 2px solid #F69B0B;
+        transform: translateY(-2%);
+    }
 `
 
 const MenuImage = styled.img`
@@ -84,64 +91,12 @@ const MenuInfo = styled.div`
     margin-bottom: 3px;
 `
 
-const ButtonWrapper = styled.div`
-    width: 100%;
-    height: 8%;
-    display: flex;
-    justify-content: right;
-    align-items: flex-end;
-`
-
-const Button = styled.button`
-    width: 150px;
-    height: 100%;
-    background-color: #F69B0B;
-    border-radius: 17px;
-    outline: none;
-    border: none;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 500;
-    transition: .2s ease;  
-
-    &:hover {
-        opacity: 70%;
-    }
-`
-
-const modalStyle = {
-    overlay: {
-        backgroundColor: "rgba(1, 1, 1, 0.5)"
-    },
-    content: {
-        height: "600px",
-        width: "800px",
-        margin: "auto",
-        borderRadius: "20px",
-        padding: "20px",
-        boxSizing: "border-box"
-    }
-}
-
-const ModalCloseButton = styled.button`
-    position: absolute;
-    color: lightgray;
-    font-size: 24px;
-    background-color: #ffffff;
-    border: none;
-    outline: none;
-`
-
 export default function VendingMachine() {
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const navigate = useNavigate()
 
-    const openModal = () => {
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setIsModalOpen(false)
+    const handleButton = () => {
+        navigate("/vendingmachine/1/drink/3/purchase")
     }
 
     return (
@@ -150,7 +105,7 @@ export default function VendingMachine() {
                 <Title>Select Drink</Title>
             </TitleWraper>
             <MenuWrapper>
-                <MenuElement borderColor = {"#D3D3D3"}>
+                <MenuElement onClick={handleButton}>
                     <MenuImage />
                     <MenuDetail>
                         <MenuName>Water</MenuName>
@@ -158,7 +113,7 @@ export default function VendingMachine() {
                         <MenuInfo>6 left</MenuInfo>
                     </MenuDetail>
                 </MenuElement>
-                <MenuElement borderColor = {"#D3D3D3"}>
+                <MenuElement onClick={handleButton}>
                 <MenuImage />
                     <MenuDetail>
                         <MenuName>Preminum<br/>Coffee</MenuName>
@@ -166,26 +121,19 @@ export default function VendingMachine() {
                         <MenuInfo>6 left</MenuInfo>
                     </MenuDetail>
                 </MenuElement>
-                <MenuElement borderColor = {"#F69B0B"}>
+                <MenuElement onClick={handleButton}>
 
                 </MenuElement>
-                <MenuElement borderColor = {"#D3D3D3"}>
+                <MenuElement onClick={handleButton}>
 
                 </MenuElement>
-                <MenuElement borderColor = {"#D3D3D3"}>
+                <MenuElement onClick={handleButton}>
 
                 </MenuElement>
-                <MenuElement borderColor = {"#D3D3D3"}>
+                <MenuElement onClick={handleButton}>
 
                 </MenuElement>
             </MenuWrapper>
-            <ButtonWrapper>
-                <Button onClick={openModal}>
-                    Select
-                </Button>
-            </ButtonWrapper>
-
-            <DrinkPurchaseModal isModalOpen={isModalOpen} closeModal={closeModal} />
         </Wrapper>
     )
 }

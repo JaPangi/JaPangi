@@ -37,7 +37,7 @@ const SelectWrapper = styled.div`
 
 const ListWrapper = styled.div`
     width: 100%;
-    height: 87%;
+    height: 100%;
     border-radius: 20px;
     background-color: #ffffff;
     padding: 35px 30px 35px 30px;
@@ -45,46 +45,24 @@ const ListWrapper = styled.div`
     box-shadow: 2px 8px 12px rgba(1, 1, 1, 0.02);
 `
 
-const ListElement = styled.div`
+const ListElement = styled.button`
     width: 98%;
     height: 60px;
     line-height: 60px;
     text-align: center;
-    border: 2px solid ${(props) => props.borderColor};
+    border: 2px solid #D3D3D3;
     border-radius: 10px;
     font-size: 18px;
     font-weight: 500;
     color: gray;
     margin-bottom: 14px;
     transition: .2s ease;   
+    background-color: #ffffff;
+    outline: none;
 
     &:hover {
         transform: translateY(-3%);
-    }
-`
-
-const ButtonWrapper = styled.div`
-    width: 100%;
-    height: 9%;
-    display: flex;
-    justify-content: right;
-    align-items: flex-end;
-`
-
-const SubmitButton = styled.button`
-    width: 140px;
-    height: 100%;
-    background-color: #F69B0B;
-    border-radius: 17px;
-    outline: none;
-    border: none;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 500;
-    transition: .2s ease;  
-
-    &:hover {
-        opacity: 70%;
+        border: 2px solid #F69B0B;
     }
 `
 
@@ -92,7 +70,7 @@ export default function SelectVendingMachine() {
 
     const navigate = useNavigate();
 
-    const handleSubmit = function(e) {
+    const handleElementButton = function(e) {
         e.preventDefault();
         navigate("/vendingmachine/1")
     }
@@ -106,12 +84,9 @@ export default function SelectVendingMachine() {
             </TitleWrapper>
             <SelectWrapper>
                 <ListWrapper>
-                    <ListElement borderColor = {"#F69B0B"}>vending machine #1</ListElement>
-                    <ListElement borderColor = {"#D3D3D3"}>vending machine #2</ListElement>
+                    <ListElement onClick={handleElementButton} borderColor = {"#F69B0B"}>vending machine #1</ListElement>
+                    <ListElement onClick={handleElementButton} borderColor = {"#D3D3D3"}>vending machine #2</ListElement>
                 </ListWrapper>
-                <ButtonWrapper>
-                    <SubmitButton onClick={handleSubmit}>select</SubmitButton>
-                </ButtonWrapper>
             </SelectWrapper>
         </Wrapper>
     )
