@@ -1,2 +1,7 @@
 server:
-  port: 8060
+  port: ${SERVER_PORT}
+
+socket:
+  client:
+    host: ${SOCKET_CLIENT_HOST}
+    port: ${SOCKET_CLIENT_PORT}
