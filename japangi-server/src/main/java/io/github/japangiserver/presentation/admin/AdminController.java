@@ -167,16 +167,4 @@ public class AdminController {
         return SocketResponse.success(
             vendingMachineService.showCurrentStockStatus(vendingMachineId));
     }
-
-/*    *//**
-     * NOTE
-     * 관리자 비밀번호 확인 API
-     *//*
-    @RequestMapping(key = "POST_{adminId}")
-    public SocketResponse checkPassword(@RequestBody AdminEditRequest adminEditRequest) {
-        return SocketResponse.success(
-            adminService.findPassword(adminEditRequest.toAdminPassword().password())
-        );
-    }*/
-
 }
