@@ -8,4 +8,6 @@ public interface AdminRepository extends JpaRepository<AdminEntity,Long> {
     boolean existsByUsername(String username);
     boolean existsByPassword(String password);
     Optional<AdminEntity> findByUsernameAndPassword(String username, String password);
+
+    boolean existsByAdminIdAndPassword(Long adminId, String password);
 }
