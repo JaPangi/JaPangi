@@ -1,20 +1,17 @@
+import { useEffect, useState } from "react"
 import ReactModal from "react-modal"
+import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
 
-const modalStyle = {
-    overlay: {
-        backgroundColor: "rgba(1, 1, 1, 0.4)"
-    },
-    content: {
-        height: "600px",
-        width: "800px",
-        margin: "auto",
-        borderRadius: "20px",
-        padding: "20px",
-        boxSizing: "border-box",
-        boxShadow: "20x 8px 12px rgba(1, 1, 1, 0.01)"
-    }
-}
+const Wrapper = styled.div`
+    width: 800px;
+    height: 600px;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 20x 8px 12px rgba(1, 1, 1, 0.01);
+    padding: 30px;
+`
 
 const ModalCloseButton = styled.button`
     position: absolute;
@@ -60,7 +57,7 @@ const ButtonWrapper = styled.div`
 `
 
 const Button = styled.button`
-    width: 120px;
+    width: 130px;
     height: 65%;
     background-color: #F69B0B;
     border-radius: 14px;
@@ -70,6 +67,7 @@ const Button = styled.button`
     font-size: 16px;
     font-weight: 500;
     transition: .2s ease;  
+    margin-right: 51px;
 
     &:hover {
         opacity: 70%;
@@ -185,11 +183,53 @@ const CoinInputButton = styled.button`
     }
 `
 
-export default function DrinkPurchaseModal(props) {
+export default function DrinkPurchase(props) {
+
+    const navigate = useNavigate()
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [moneyInput, setMoneyInput] = useState({10:0, 50:0, 100:0, 500:0, 1000:0})
+
+    useEffect(() => {
+        setMoneyInput({10:0, 50:0, 100:0, 500:0, 1000:0})
+        setTotalPrice(0)
+    }, [])
+
+    function handleMoneyInputButton(e) {
+        e.preventDefault();
+        const buttonType = e.target.innerText
+        const target = e.target.parentNode.parentNode.firstChild.innerText.split(" ")[1]
+
+        
+        if (buttonType === "+") {
+            if (parseInt(totalPrice) + parseInt(target) > 5000) {
+                alert("cannot input less than 5000")
+                return
+            }
+            setMoneyInput((prevState) => {
+                return { ...prevState, target: moneyInput[target] += 1 }
+            })
+            setTotalPrice(parseInt(totalPrice) + parseInt(target))
+        } else if (buttonType === "-") {
+            if (moneyInput[target] - 1 < 0) {
+                alert("cannot input less than 0")
+                return
+            }
+            setMoneyInput((prevState) => {
+                return { ...prevState, target: moneyInput[target] -= 1 }
+            })
+            setTotalPrice(parseInt(totalPrice) - parseInt(target))
+        }
+    }
+
+    function handlePurchaseButton(e) {
+        // todo 입력ㄱ밧 검증 구매 가능한지
+
+        alert("changes \n￦ 10 : 1\n￦ 50 : 1\n￦ 100 : 1\n￦ 500 : 1\n￦ 1000 : 1")
+        navigate("/vendingmachine/1/change")
+    }
 
     return (
-        <ReactModal isOpen={props.isModalOpen} onRequestClose={props.closeModal} style={modalStyle}>
-            <ModalCloseButton onClick={props.closeModal}>X</ModalCloseButton>
+        <Wrapper>
             <ModalWrapper>
                 <TitleWrapper>
                     Insert Coins
@@ -203,7 +243,7 @@ export default function DrinkPurchaseModal(props) {
                     </DrinkInfoWrapper>
                     <InsertCoinsWrapper>
                         <InputStateBox>
-                            ￦ 300
+                            ￦ {totalPrice}
                         </InputStateBox>
                         
                         <InputBox>
@@ -211,9 +251,9 @@ export default function DrinkPurchaseModal(props) {
                                 ￦ 10
                             </CoinDetail>
                             <CoinInput>
-                                <CoinInputButton>-</CoinInputButton>
-                                <CoinAmountState>2</CoinAmountState>
-                                <CoinInputButton>+</CoinInputButton>
+                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                <CoinAmountState>{moneyInput[10]}</CoinAmountState>
+                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
                             </CoinInput>
                         </InputBox>
 
@@ -222,9 +262,9 @@ export default function DrinkPurchaseModal(props) {
                                 ￦ 50
                             </CoinDetail>
                             <CoinInput>
-                                <CoinInputButton>-</CoinInputButton>
-                                <CoinAmountState>2</CoinAmountState>
-                                <CoinInputButton>+</CoinInputButton>
+                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                <CoinAmountState>{moneyInput[50]}</CoinAmountState>
+                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
                             </CoinInput>
                         </InputBox>
 
@@ -233,9 +273,9 @@ export default function DrinkPurchaseModal(props) {
                                 ￦ 100
                             </CoinDetail>
                             <CoinInput>
-                                <CoinInputButton>-</CoinInputButton>
-                                <CoinAmountState>2</CoinAmountState>
-                                <CoinInputButton>+</CoinInputButton>
+                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                <CoinAmountState>{moneyInput[100]}</CoinAmountState>
+                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
                             </CoinInput>
                         </InputBox>
 
@@ -244,9 +284,9 @@ export default function DrinkPurchaseModal(props) {
                                 ￦ 500
                             </CoinDetail>
                             <CoinInput>
-                                <CoinInputButton>-</CoinInputButton>
-                                <CoinAmountState>2</CoinAmountState>
-                                <CoinInputButton>+</CoinInputButton>
+                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                <CoinAmountState>{moneyInput[500]}</CoinAmountState>
+                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
                             </CoinInput>
                         </InputBox>
 
@@ -255,20 +295,20 @@ export default function DrinkPurchaseModal(props) {
                                 ￦ 1000
                             </CoinDetail>
                             <CoinInput>
-                                <CoinInputButton>-</CoinInputButton>
-                                <CoinAmountState>2</CoinAmountState>
-                                <CoinInputButton>+</CoinInputButton>
+                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                <CoinAmountState>{moneyInput[1000]}</CoinAmountState>
+                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
                             </CoinInput>
                         </InputBox>
                     </InsertCoinsWrapper>
                 </ContentsWrapper>
 
                 <ButtonWrapper>
-                    <Button>
+                    <Button onClick={handlePurchaseButton}>
                         Purchase
                     </Button>
                 </ButtonWrapper>
             </ModalWrapper>
-        </ReactModal>
+        </Wrapper>
     )
 }
