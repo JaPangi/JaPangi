@@ -8,6 +8,7 @@ import io.github.japangiserver.domains.money.serviceimpl.MoneyReader;
 import io.github.japangiserver.domains.order.MoneyAmount;
 import io.github.japangiserver.domains.order.MoneyAmounts;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,14 +46,15 @@ public class ChangeUpdater {
      * @param vendingMachineId 수거할 자판기 Id(PK)
      */
     @Transactional
-    public void collectChange(Long vendingMachineId) {
-
-        changeReader.getChanges(vendingMachineId)
+    public int collectChange(Long vendingMachineId) {
+       return changeReader.getChanges(vendingMachineId)
             .stream()
             .filter(change -> change.amount() > 5)
-            .forEach(change -> {
+            .map(change -> {
                 ChangeEntity changeEntity = changeEntityReader.getChangeEntity(change);
-                changeEntity.collectMoneyByAdmin();
-            });
+                int money = changeEntity.collectMoneyByAdmin();
+                return change.value()* money;
+            })
+            .reduce(0,Integer::sum);
     }
 }
