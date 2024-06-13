@@ -1,5 +1,7 @@
 import styled from "styled-components"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import request from "../../../request/Request"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -65,7 +67,7 @@ const MenuElement = styled.button`
 const MenuImage = styled.img`
     width: 47%;
     height: 100%;
-    background-color: lightgray;
+    background-color: #ffffff;
     outline: none;
     border: none;
     border-radius: 5px;
@@ -93,10 +95,19 @@ const MenuInfo = styled.div`
 
 export default function VendingMachine() {
 
+    const params = useParams()
     const navigate = useNavigate()
+    const [drinks, setDrinks] = useState([])
 
-    const handleButton = () => {
-        navigate("/vendingmachine/1/drink/3/purchase")
+    useEffect(() => {
+        request("VENDING_MACHINE_INFO_" + params.vendingmachineId, null)
+        .then(res => {
+            setDrinks(res.data.data)
+        })
+    }, [])
+
+    const handleButton = (e) => {
+        navigate("/vendingmachine/"+ params.vendingmachineId +"/drink/"+ parseInt(e.target.id) +"/purchase")
     }
 
     return (
@@ -105,34 +116,20 @@ export default function VendingMachine() {
                 <Title>Select Drink</Title>
             </TitleWraper>
             <MenuWrapper>
-                <MenuElement onClick={handleButton}>
-                    <MenuImage />
-                    <MenuDetail>
-                        <MenuName>Water</MenuName>
-                        <MenuInfo>￦ 450</MenuInfo>
-                        <MenuInfo>6 left</MenuInfo>
-                    </MenuDetail>
-                </MenuElement>
-                <MenuElement onClick={handleButton}>
-                <MenuImage />
-                    <MenuDetail>
-                        <MenuName>Preminum<br/>Coffee</MenuName>
-                        <MenuInfo>￦ 700</MenuInfo>
-                        <MenuInfo>6 left</MenuInfo>
-                    </MenuDetail>
-                </MenuElement>
-                <MenuElement onClick={handleButton}>
-
-                </MenuElement>
-                <MenuElement onClick={handleButton}>
-
-                </MenuElement>
-                <MenuElement onClick={handleButton}>
-
-                </MenuElement>
-                <MenuElement onClick={handleButton}>
-
-                </MenuElement>
+                {
+                    drinks.map(d => {
+                        return (
+                            <MenuElement onClick={handleButton} id={d.drinkId}>
+                                <MenuImage src={d.drinkImageUrl} id={d.drinkId} />
+                                <MenuDetail id={d.drinkId}>
+                                    <MenuName id={d.drinkId}>{d.drinkName}</MenuName>
+                                    <MenuInfo id={d.drinkId}>￦ {d.drinkPrice}</MenuInfo>
+                                    <MenuInfo id={d.drinkId}>{d.stock} left</MenuInfo>
+                                </MenuDetail>
+                            </MenuElement>
+                        )
+                    })
+                }
             </MenuWrapper>
         </Wrapper>
     )

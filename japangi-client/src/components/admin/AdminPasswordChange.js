@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
+import request from "../../request/Request"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -37,10 +39,10 @@ const Description = styled.div`
 
 const InputBox = styled.input`
     width: 292px;
-    height: 30px;
+    height: 38px;
     border: none;
     border: 2px solid lightgray;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-bottom: 15px;
     outline: none;
     padding-left: 10px;
@@ -63,7 +65,7 @@ const SubmitButton = styled.button`
     font-size: 20px;
     font-weight: 500;
     transition: .2s ease;  
-    margin-top: 55px;
+    margin-top: 45px;
 
     &:hover {
         opacity: 70%;
@@ -73,9 +75,41 @@ const SubmitButton = styled.button`
 export default function AdminPasswordChange() {
 
     const navigate = useNavigate()
+    const params = useParams()
+    const [values, setValues] = useState({
+        original: "",
+        change: "",
+        confirm: "",
+    })
+
+    useEffect(() => {
+        document.cookie = "user=unknown;"
+    })
+
+    function handleChange(e) {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value,
+        })
+    }
 
     const handleSubmitButton = () => {
-        navigate("/admin/login")
+        if (values.change !== values.confirm) {
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+        }
+
+        const data = {
+            password: values.password,
+            changePassword: values.changePassword
+        }
+        const targetUsername = params.username
+        
+        request("ADMIN_PATCH_"+targetUsername, data)
+        .then(res => {
+            console.log(res.data)
+        })
+
+        // navigate("/admin/login")
     }
 
     return (
@@ -83,14 +117,14 @@ export default function AdminPasswordChange() {
             <Title>Change Password</Title>
             <Content>
                 <Description>original password</Description>
-                <InputBox type={"password"} />
+                <InputBox type={"password"} name={"original"} onChange={handleChange} />
 
                 <Empty />
 
                 <Description>change password</Description>
-                <InputBox type={"password"} />
+                <InputBox type={"password"} name={"change"} onChange={handleChange} />
                 <Description>password confirm</Description>
-                <InputBox type={"password"} />
+                <InputBox type={"password"} name={"confirm"} onChange={handleChange} />
                 <SubmitButton onClick={handleSubmitButton}>Submit</SubmitButton>
             </Content>
         </Wrapper>

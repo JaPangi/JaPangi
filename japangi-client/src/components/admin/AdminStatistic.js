@@ -1,5 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
+import { useState, useEffect } from "react"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -73,10 +74,17 @@ const Content = styled.div`
 export default function AdminStatistic() {
 
     const navigate = useNavigate();
+    const params = useParams()
+    const [username, setUsername] = useState("");
+    
+    useEffect(() => {
+        const user = document.cookie.match("user")["input"].substring(5)
+        setUsername(user)
+    }, [])
 
     const HandleAdminButtonClick = (e) => {
         if (window.confirm("Would you like to go to the admin password change page?")) {
-            navigate("/admin/password/change")
+            navigate("/admin/password/change/" + username)
         } else {
         }
     }
@@ -84,9 +92,9 @@ export default function AdminStatistic() {
     return (
         <Wrapper>
             <Title>
-                <AdminTitle onClick={HandleAdminButtonClick}>wwan13</AdminTitle>
+                <AdminTitle onClick={HandleAdminButtonClick}>{username}</AdminTitle>
                 <ContentTitle>
-                    <ContentName>Vending Machine #2</ContentName>
+                    <ContentName>Vending Machine #{params.vendingmachineId}</ContentName>
                     <DeleteButton>remove</DeleteButton>
                 </ContentTitle>
             </Title>

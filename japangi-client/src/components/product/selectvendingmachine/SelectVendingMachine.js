@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import request from "../../../request/Request"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -69,10 +71,18 @@ const ListElement = styled.button`
 export default function SelectVendingMachine() {
 
     const navigate = useNavigate();
+    const [vendingMachines, setVendingMachine] = useState([])
+
+    useEffect(() => {
+        request("VENDING_MACHINE_ALL", null)
+        .then(res => {
+            setVendingMachine(res.data.data)
+        })
+    }, [])
 
     const handleElementButton = function(e) {
         e.preventDefault();
-        navigate("/vendingmachine/1")
+        navigate("/vendingmachine/" + parseInt(e.target.name))
     }
 
     return (
@@ -84,8 +94,11 @@ export default function SelectVendingMachine() {
             </TitleWrapper>
             <SelectWrapper>
                 <ListWrapper>
-                    <ListElement onClick={handleElementButton} borderColor = {"#F69B0B"}>vending machine #1</ListElement>
-                    <ListElement onClick={handleElementButton} borderColor = {"#D3D3D3"}>vending machine #2</ListElement>
+                    {
+                        vendingMachines.map(vm => {
+                            return <ListElement onClick={handleElementButton} borderColor = {"#F69B0B"} name={vm.vendingMachineId}>vending machine #{vm.vendingMachineId}</ListElement>        
+                        })
+                    }
                 </ListWrapper>
             </SelectWrapper>
         </Wrapper>

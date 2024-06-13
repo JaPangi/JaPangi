@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import ReactModal from "react-modal"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { styled } from "styled-components"
+import request from "../../../request/Request"
 
 const Wrapper = styled.div`
     width: 800px;
@@ -185,13 +186,20 @@ const CoinInputButton = styled.button`
 
 export default function DrinkPurchase(props) {
 
+    const params = useParams()
     const navigate = useNavigate()
     const [totalPrice, setTotalPrice] = useState(0)
     const [moneyInput, setMoneyInput] = useState({10:0, 50:0, 100:0, 500:0, 1000:0})
+    const [drink, setDrink] = useState({})
 
     useEffect(() => {
         setMoneyInput({10:0, 50:0, 100:0, 500:0, 1000:0})
         setTotalPrice(0)
+
+        request("DRINK_GET_" + params.drinkId)
+        .then(res => {
+            setDrink(res.data.data)
+        })
     }, [])
 
     function handleMoneyInputButton(e) {
@@ -222,10 +230,56 @@ export default function DrinkPurchase(props) {
     }
 
     function handlePurchaseButton(e) {
-        // todo 입력ㄱ밧 검증 구매 가능한지
+        if (totalPrice < drink.drinkPrice) {
+            alert("금액이 부족합니댜.")
+            return
+        }
 
-        alert("changes \n￦ 10 : 1\n￦ 50 : 1\n￦ 100 : 1\n￦ 500 : 1\n￦ 1000 : 1")
-        navigate("/vendingmachine/1/change")
+        const data = {
+            drinkId : params.drinkId,
+            vendingMachineId : params.vendingmachineId,
+            moneyAmounts: [
+                {
+                    value : 10,
+                    amount : moneyInput[10]
+                },
+                {
+                    value : 50,
+                    amount : moneyInput[50]
+                },
+                {
+                    value : 100,
+                    amount : moneyInput[100]
+                },
+                {
+                    value : 500,
+                    amount : moneyInput[500]
+                },
+                {
+                    value : 1000,
+                    amount : moneyInput[1000]
+                }
+            ]
+        }
+
+        request("ORDER_GET", data)
+        .then(res => {
+            if (res.data.status === "ERROR") {
+                alert(res.data.message)
+                navigate("/vendingmachine/" + params.vendingmachineId)
+                return
+            }
+            console.log(res.data)
+            const changes = res.data.data.moneyAmounts
+            changes.sort((a, b) => a.value - b.value)
+
+            var queryString = "";
+            changes.map(c => {
+                queryString += c.value + "=" + c.amount + "&"
+            })
+            queryString = queryString.substring(0, queryString.length-1)
+            navigate("/vendingmachine/" + params.vendingmachineId + "/change?" + queryString)
+        })
     }
 
     return (
@@ -237,9 +291,9 @@ export default function DrinkPurchase(props) {
 
                 <ContentsWrapper>
                     <DrinkInfoWrapper>
-                        <DrinkImage />
-                        <DrinkDateil>Premium Coffee</DrinkDateil>
-                        <DrinkDateil>￦ 2000</DrinkDateil>
+                        <DrinkImage src={drink.imageUrl} />
+                        <DrinkDateil>{drink.drinkName}</DrinkDateil>
+                        <DrinkDateil>￦ {drink.drinkPrice}</DrinkDateil>
                     </DrinkInfoWrapper>
                     <InsertCoinsWrapper>
                         <InputStateBox>

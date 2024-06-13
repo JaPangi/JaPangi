@@ -1,6 +1,7 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import request from "../../request/Request"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -10,7 +11,7 @@ const Wrapper = styled.div`
     align-items: center;
 `
 
-const ContentBox = styled.div`
+const ContentBox = styled.form`
     width: 45%;
     height: 43%;
     border-radius: 17px;
@@ -79,14 +80,38 @@ const SubmitButton = styled.button`
 export default function AdminLogin() {
 
     const navigate = useNavigate()
+    const [values, setValues] = useState({
+        id: "",
+        pw: ""
+    })
 
     useEffect(() => {
         document.cookie = "user=unknown;"
     })
 
+    function handleChange(e) {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value,
+        })
+    }
+
     function handleLoginbutton(e) {
-        
-        navigate("/admin/vendingmachine/select")
+        e.preventDefault()
+        const data = {
+            username : values.id,
+            password : values.pw
+        }
+
+        request("ADMIN_LOGIN", data)
+        .then(res => {
+            if (res.data.status === "ERROR") {
+                alert(res.data.message)
+            } else {
+                document.cookie = "user=" + res.data.data.username + ';'
+                navigate("/admin/vendingmachine/select")
+            }
+        })
     }
 
     return (
@@ -98,13 +123,13 @@ export default function AdminLogin() {
                 <LonginBox>
                     <InputBox>
                         ID
-                        <Input />
+                        <Input name = "id" onChange={handleChange} />
                     </InputBox>
                     <InputBox>
                         PW
-                        <Input type={"password"} />
+                        <Input type={"password"} name = "pw" onChange={handleChange} />
                     </InputBox>
-                    <SubmitButton onClick={handleLoginbutton}>login</SubmitButton>
+                    <SubmitButton onClick={handleLoginbutton} onChange={handleChange}>login</SubmitButton>
                 </LonginBox>
             </ContentBox>
         </Wrapper>

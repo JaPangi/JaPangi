@@ -1,5 +1,7 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import request from "../../request/Request"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -95,9 +97,21 @@ const VendingMachineAddButton = styled.button`
 export default function AdminSelectVendingMachine() {
 
     const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const [vendingMachines, setVendingMachine] = useState([])
+    
+    useEffect(() => {
+        const user = document.cookie.match("user")["input"].substring(5)
+        setUsername(user)
+
+        request("VENDING_MACHINE_ALL", null)
+        .then(res => {
+            setVendingMachine(res.data.data)
+        })
+    }, [])
 
     const HandleButtonClick = (e) => {
-        navigate("/admin/vendingmachine/3")
+        navigate("/admin/vendingmachine/" + e.target.name)
     }
 
     const HandleAdminButtonClick = (e) => {
@@ -116,13 +130,15 @@ export default function AdminSelectVendingMachine() {
     return (
         <Wrapper>
             <Title>
-                <AdminTitle onClick={HandleAdminButtonClick}>wwan13</AdminTitle>
+                <AdminTitle onClick={HandleAdminButtonClick}>{username}</AdminTitle>
                 <ContentTitle>Select Vending Machie For Managing</ContentTitle>
             </Title>
             <Content>
-                <VendingMachineElement onClick={HandleButtonClick}>Vending Machine #1</VendingMachineElement>
-                <VendingMachineElement onClick={HandleButtonClick}>Vending Machine #2</VendingMachineElement>
-                <VendingMachineElement onClick={HandleButtonClick}>Vending Machine #3</VendingMachineElement>
+                {
+                    vendingMachines.map(vm => {
+                        return <VendingMachineElement onClick={HandleButtonClick} name={vm.vendingMachineId}>Vending Machine #{vm.vendingMachineId}</VendingMachineElement>
+                    })
+                }
 
                 <VendingMachineAddButton onClick={HandleVendingMachineAddButton}>+</VendingMachineAddButton>
             </Content>

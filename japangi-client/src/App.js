@@ -20,7 +20,7 @@ function App() {
         <Route path='/vendingmachine/:vendingmachineId/change' element={<Changes />} />
 
         <Route path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/password/change' element={<AdminPasswordChange />} />
+        <Route path='/admin/password/change/:username' element={<AdminPasswordChange />} />
         <Route path='/admin/vendingmachine/select' element={<AdminSelectVendingMachine />} />
         <Route path='/admin/vendingmachine/:vendingmachineId' element={<AdminStatistic />} />
       </Route>

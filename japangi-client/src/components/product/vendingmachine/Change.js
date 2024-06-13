@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 
 const Wrapper = styled.div`
@@ -35,11 +36,16 @@ const Change = styled.div`
     margin-left: 25px;
 `
 
+const ChangeElement = styled.div`
+    width: 350px;
+    margin-top: 10px;
+`
+
 const Button = styled.button`
     width: 350px;
-    height: 55px;
+    height: 45px;
     margin-left: 25px;
-    margin-top: 15px;
+    margin-top: 25px;
     background-color: #F69B0B;
     border: none;
     font-size: 18px;
@@ -57,9 +63,30 @@ const Button = styled.button`
 export default function Changes() {
 
     const navigate = useNavigate()
+    const params = useParams()
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [changes, setChanges] = useState({})
+
+    useEffect(() => {
+        const changeValues = ["10", "50", "100", "500", "1000"]
+        var tmpChanges = {
+            "10" : 0,
+            "50" : 0,
+            "100" : 0,
+            "500" : 0,
+            "1000" : 0,
+        }
+
+        changeValues.map(v => {
+            if (searchParams.get(v) !== null) {
+                tmpChanges[v] = searchParams.get(v)
+            }
+        })
+        setChanges(tmpChanges)
+    }, [])
 
     function handleConfirmButton(e) {
-        navigate("/vendingmachine/3")
+        navigate("/vendingmachine/" + params.vendingmachineId)
     }
 
     return (
@@ -69,7 +96,11 @@ export default function Changes() {
             </Title>
             <Content>
                 <Change>
-                    
+                    <ChangeElement>￦ 10 : {changes["10"]}</ChangeElement>
+                    <ChangeElement>￦ 50 : {changes["50"]}</ChangeElement>
+                    <ChangeElement>￦ 100 : {changes["100"]}</ChangeElement>
+                    <ChangeElement>￦ 500 : {changes["500"]}</ChangeElement>
+                    <ChangeElement>￦ 1000 : {changes["1000"]} </ChangeElement>
                 </Change>
                 <Button onClick={handleConfirmButton}>Confirm</Button>
             </Content>
