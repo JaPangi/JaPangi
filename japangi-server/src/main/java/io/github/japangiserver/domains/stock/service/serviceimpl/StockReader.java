@@ -3,6 +3,7 @@ package io.github.japangiserver.domains.stock.service.serviceimpl;
 import io.github.japangiserver.domains.stock.AddStock;
 import io.github.japangiserver.domains.stock.persistence.repository.StockRepository;
 import io.github.japangiserver.presentation.drink.dto.response.DrinkStatusResponse;
+import io.github.japangiserver.presentation.stock.dto.response.StockInfoResponse;
 import io.github.japangiserver.presentation.stock.dto.response.StockStatusResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,5 +54,12 @@ public class StockReader {
             .stream()
             .map(DrinkStatusResponse::fromStockEntity)
             .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public StockInfoResponse getDrinkStockStatus(Long drinkId, Long vendingMachineId){
+        return stockRepository.findByDrinkIdAndVendingMachineId(drinkId,vendingMachineId)
+            .map(StockInfoResponse::fromEntity)
+            .orElseThrow(() -> new IllegalStateException("재고가 존재하지 않습니다!"));
     }
 }

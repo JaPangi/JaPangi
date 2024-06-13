@@ -45,6 +45,7 @@ public class AdminController {
     /**
      * NOTE
      *  관리자 비밀번호 변경 API
+     *
      * @param adminId          변경하려는 관리자 Id(PK)
      * @param adminEditRequest 변경하려는 비밀번호
      */
@@ -166,5 +167,21 @@ public class AdminController {
     public SocketResponse getVendingMachineStockStatus(@KeyParameter Long vendingMachineId) {
         return SocketResponse.success(
             vendingMachineService.showCurrentStockStatus(vendingMachineId));
+    }
+
+    /** NOTE
+     *
+     * @param drinkId
+     * @param vendingMachineId
+     * @return
+     */
+    @RequestMapping(key = "GET_STOCK_{drinkId}_{vendingMachineId}")
+    public SocketResponse getDrinkStock(
+        @KeyParameter Long drinkId,
+        @KeyParameter Long vendingMachineId
+    ) {
+        return SocketResponse.success(
+            vendingMachineService.showDrinkStock(drinkId, vendingMachineId)
+        );
     }
 }
