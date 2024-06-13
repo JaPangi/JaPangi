@@ -109,7 +109,7 @@ export default function AdminLogin() {
                 alert(res.data.message)
             } else {
                 window.sessionStorage.setItem("username", res.data.data.username)
-                window.sessionStorage.setItem("userid", res.data.data.userId)
+                window.sessionStorage.setItem("userid", res.data.data.adminId)
                 navigate("/admin/vendingmachine/select")
             }
         })

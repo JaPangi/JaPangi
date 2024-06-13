@@ -113,7 +113,7 @@ export default function AdminPasswordChange() {
             console.log(res.data)
         })
 
-        // navigate("/admin/login")
+        navigate("/admin/login")
     }
 
     return (

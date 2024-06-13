@@ -122,8 +122,14 @@ export default function AdminSelectVendingMachine() {
     }
 
     const HandleVendingMachineAddButton = (e) => {
-        if (window.confirm("Would you like to add a vending machine?")) {
-            
+        if (window.confirm("새로운 자판기를 생성하시겠습니까?")) {
+            request("VENDING_MACHINE_INIT")
+            .then(res => {
+                request("VENDING_MACHINE_ALL", null)
+                .then(r => {
+                    setVendingMachine(r.data.data)
+                })
+            })
         }
     }
 

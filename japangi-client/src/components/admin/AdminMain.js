@@ -78,8 +78,8 @@ const Content = styled.div`
 `
 
 const Button = styled.button`
-    width: 43%;
-    height: 40%;
+    width: 29%;
+    height: 80%;
     background-color: #ffffff;
     border: 2px solid lightgray;
     border-radius: 15px;
@@ -121,7 +121,7 @@ export default function AdminMain() {
     function handleCollectButton(e) {
         request("ADMIN_COLLECT_MONEY_" + params.vendingmachineId, null)
         .then(res => {
-            console.log(res.data)
+            alert(res.data.data + "원을 받았습니다.")
         })
     }
 
@@ -137,7 +137,6 @@ export default function AdminMain() {
             <Content>
                 <Button name="drink" onClick={HandleLinkButtonClick}>음료 관리</Button>
                 <Button name="statistic" onClick={handleCollectButton}>수금</Button>
-                <Button name="change" onClick={HandleLinkButtonClick}>거스름돈 관리</Button>
                 <Button name="statistic" onClick={HandleLinkButtonClick}>통계 확인</Button>
             </Content>
         </Wrapper>

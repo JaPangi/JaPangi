@@ -141,7 +141,6 @@ export default function ManageDrinkDetail() {
 
     const [drink, setDrink] = useState({})
     const [stock, setStock] = useState(0)
-    const [initialStock, setInitialStock] = useState(0)
 
     IsAdminLoggedIn()
     
@@ -160,7 +159,6 @@ export default function ManageDrinkDetail() {
             request("ADMIN_GET_STOCK_" + params.drinkId + "_" + params.vendingmachineId, null)
             .then(res => {
                 setStock(res.data.data.amount)
-                setInitialStock(res.data.data.amount)
             })
         })
     }, [])
@@ -199,7 +197,7 @@ export default function ManageDrinkDetail() {
 
             const stockData = {
                 drinkId: params.drinkId,
-                amount: stock - initialStock
+                amount: stock
             }
             request("ADMIN_ADD_DRINK_" + params.vendingmachineId, stockData)
             .then(res => {
