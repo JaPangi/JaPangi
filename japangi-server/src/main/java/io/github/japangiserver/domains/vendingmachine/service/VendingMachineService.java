@@ -9,6 +9,7 @@ import io.github.japangiserver.domains.vendingmachine.service.serviceimpl.Vendin
 import io.github.japangiserver.domains.vendingmachine.service.serviceimpl.VendingMachineSaver;
 import io.github.japangiserver.presentation.change.dto.response.ChangeStatusResponse;
 import io.github.japangiserver.presentation.drink.dto.response.DrinkStatusResponse;
+import io.github.japangiserver.presentation.stock.dto.response.StockInfoResponse;
 import io.github.japangiserver.presentation.stock.dto.response.StockStatusResponse;
 import io.github.japangiserver.presentation.vendingmachine.dto.response.VendingMachineResponse;
 import java.util.List;
@@ -73,5 +74,9 @@ public class VendingMachineService {
      */
     public List<DrinkStatusResponse> showVendingMachineInfo(Long vendingMachineId) {
         return stockReader.getVendingMachineInfos(vendingMachineId);
+    }
+
+    public StockInfoResponse showDrinkStock(Long drinkId, Long vendingMachineId) {
+        return stockReader.getDrinkStockStatus(drinkId,vendingMachineId);
     }
 }
