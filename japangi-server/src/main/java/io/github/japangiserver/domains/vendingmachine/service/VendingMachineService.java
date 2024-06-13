@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** NOTE
+/**
+ * NOTE
  * 자판기 핵심 비즈니스 로직 service Layer
  */
 @Service
@@ -31,7 +32,8 @@ public class VendingMachineService {
     private final ChangeReader changeReader;
     private final StockReader stockReader;
 
-    /** NOTE
+    /**
+     * NOTE
      * 자판기 초기 셋팅 서비스
      */
     @Transactional
@@ -44,23 +46,28 @@ public class VendingMachineService {
         return vendingMachineId;
     }
 
-    /** NOTE
+    /**
+     * NOTE
      * 현재 거스름돈 현황 조회 서비스
+     *
      * @param vendingMachineId 자판기 Id(PK)
      */
     public List<ChangeStatusResponse> showCurrentStatus(Long vendingMachineId) {
         return changeReader.getCurrentStatus(vendingMachineId);
     }
 
-    /** NOTE
+    /**
+     * NOTE
      * 자판기 목록 조회 서비스
      */
     public List<VendingMachineResponse> showVendingMachines() {
         return vendingMachineReader.vendingMachineList();
     }
 
-    /** NOTE
+    /**
+     * NOTE
      * 자판기 재고 조회 서비스
+     *
      * @param vendingMachineId 자판기 Id(PK)
      */
     public List<StockStatusResponse> showCurrentStockStatus(Long vendingMachineId) {
@@ -70,13 +77,21 @@ public class VendingMachineService {
     /**
      * NOTE
      * 자판기 음료정보들을 보여주는 서비스
+     *
      * @param vendingMachineId 자판기 Id(PK)
      */
     public List<DrinkStatusResponse> showVendingMachineInfo(Long vendingMachineId) {
         return stockReader.getVendingMachineInfos(vendingMachineId);
     }
 
+    /**
+     * NOTE
+     * 자판기에 속한 단일 음료 재고 조회 서비스
+     *
+     * @param drinkId          음료 Id(PK)
+     * @param vendingMachineId 자판기 Id(PK)
+     */
     public StockInfoResponse showDrinkStock(Long drinkId, Long vendingMachineId) {
-        return stockReader.getDrinkStockStatus(drinkId,vendingMachineId);
+        return stockReader.getDrinkStockStatus(drinkId, vendingMachineId);
     }
 }

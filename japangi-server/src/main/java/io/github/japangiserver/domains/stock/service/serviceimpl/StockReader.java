@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/** NOTE
+/**
+ * NOTE
  * 재고 조회 implement Layer
  */
 @Component
@@ -20,45 +21,58 @@ public class StockReader {
 
     private final StockRepository stockRepository;
 
-    /** NOTE
+    /**
+     * NOTE
      * 재고 domain 조회 구현체
-     * @param drinkId 음료 Id(PK)
+     *
+     * @param drinkId          음료 Id(PK)
      * @param vendingMachineId 자판기 Id(PK)
      */
     @Transactional(readOnly = true)
     public AddStock getStock(Long drinkId, Long vendingMachineId) {
-       return stockRepository.findByDrinkIdAndVendingMachineId(drinkId,vendingMachineId)
-           .map(stock -> new AddStock(drinkId,stock.getAmount(),vendingMachineId))
-           .orElseThrow(() -> new IllegalStateException("재고가 존재하지 않습니다!"));
+        return stockRepository.findByDrinkIdAndVendingMachineId(drinkId, vendingMachineId)
+            .map(stock -> new AddStock(drinkId, stock.getAmount(), vendingMachineId))
+            .orElseThrow(() -> new IllegalStateException("재고가 존재하지 않습니다!"));
     }
 
-    /** NOTE
+    /**
+     * NOTE
      * 현재 재고 조회 구현체
+     *
      * @param vendingMachineId 자판기 Id(PK)
      */
     @Transactional(readOnly = true)
-    public List<StockStatusResponse> getCurrentStockStatus(Long vendingMachineId){
+    public List<StockStatusResponse> getCurrentStockStatus(Long vendingMachineId) {
         return stockRepository.findByVendingMachineId(vendingMachineId)
             .stream()
             .map(StockStatusResponse::fromEntity)
             .toList();
     }
 
-    /** NOTE
+    /**
+     * NOTE
      * 자판기 음료 재고 조회 구현체
+     *
      * @param vendingMachineId 자판기 Id(PK)
      */
     @Transactional(readOnly = true)
-    public List<DrinkStatusResponse> getVendingMachineInfos(Long vendingMachineId){
+    public List<DrinkStatusResponse> getVendingMachineInfos(Long vendingMachineId) {
         return stockRepository.findByVendingMachineId(vendingMachineId)
             .stream()
             .map(DrinkStatusResponse::fromStockEntity)
             .toList();
     }
 
+    /**
+     * NOTE
+     * 자판기 단일 음료 재고 조회 구현체
+     *
+     * @param drinkId          음료 Id(PK)
+     * @param vendingMachineId 자판기 Id(PK)
+     */
     @Transactional(readOnly = true)
-    public StockInfoResponse getDrinkStockStatus(Long drinkId, Long vendingMachineId){
-        return stockRepository.findByDrinkIdAndVendingMachineId(drinkId,vendingMachineId)
+    public StockInfoResponse getDrinkStockStatus(Long drinkId, Long vendingMachineId) {
+        return stockRepository.findByDrinkIdAndVendingMachineId(drinkId, vendingMachineId)
             .map(StockInfoResponse::fromEntity)
             .orElseThrow(() -> new IllegalStateException("재고가 존재하지 않습니다!"));
     }
