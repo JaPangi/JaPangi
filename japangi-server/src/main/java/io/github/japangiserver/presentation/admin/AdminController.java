@@ -84,7 +84,7 @@ public class AdminController {
      *
      * @param vendingMachineId 현황 파악하려는 자판기 Id(PK)
      */
-    @RequestMapping(key = "GET_{vendingMachineId}")
+    @RequestMapping(key = "GET_CHANGE_{vendingMachineId}")
     public SocketResponse getVendingMachineChangeStatus(@KeyParameter Long vendingMachineId) {
         return SocketResponse.success(vendingMachineService.showCurrentStatus(vendingMachineId));
     }
@@ -159,21 +159,22 @@ public class AdminController {
 
     /**
      * NOTE
-     * 자판기 재고 현황 파악
+     * 자판기 재고 현황 파악 API
      *
      * @param vendingMachineId 재고를 파악하려는 자판기 Id(PK)
      */
-    @RequestMapping(key = "GET_{vendingMachineId}")
+    @RequestMapping(key = "GET_STOCK_{vendingMachineId}")
     public SocketResponse getVendingMachineStockStatus(@KeyParameter Long vendingMachineId) {
         return SocketResponse.success(
             vendingMachineService.showCurrentStockStatus(vendingMachineId));
     }
 
-    /** NOTE
+    /**
+     * NOTE
+     * 단일 음료 재고 파악 API
      *
-     * @param drinkId
-     * @param vendingMachineId
-     * @return
+     * @param drinkId          음료 Id(PK)
+     * @param vendingMachineId 자판기 Id(PK)
      */
     @RequestMapping(key = "GET_STOCK_{drinkId}_{vendingMachineId}")
     public SocketResponse getDrinkStock(
