@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 public class DrinkService {
     private final DrinkReader drinkReader;
 
+    /** NOTE
+     * 음료 세부사항 정보 조회 서비스
+     * @param drinkId 음료 Id(PK)
+     */
     public DrinkInfoResponse showDrinkInfo(Long drinkId){
         return drinkReader.getDrinkInfo(drinkId);
     }
