@@ -35,10 +35,12 @@ public class ChangeProvider {
         List<Change> change = changeReader.getChanges(vendingMachineId);
         for (Change changeDomain : change) {
             int value = changeReader.getValue(changeDomain); //화폐 단위
+            System.out.println("value = " + value);
             int changeAmount = excess / value; //거스러줘야할 화폐의 양
-            changeValidator.checkChanges(changeDomain, changeAmount); //잔돈이 자판기에 남아있는지 확인
+            System.out.println("changeAmount = " + changeAmount);
+            boolean checked = changeValidator.checkChanges(changeDomain, changeAmount);//잔돈이 자판기에 남아있는지 확인
 
-            if (changeAmount > 0) {
+            if (changeAmount > 0 && checked) {
                 excess = changeCalculator.calculatorChange(changeDomain, changeAmount, excess, value);
                 MoneyAmount amount = moneyAmountCreator.getMoneyAmount(changeAmount, value);
                 moneyAmount.add(amount);
