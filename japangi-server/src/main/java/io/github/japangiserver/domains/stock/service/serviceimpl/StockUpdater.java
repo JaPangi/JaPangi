@@ -30,9 +30,9 @@ public class StockUpdater {
      * @param addStock AddStock domain
      */
     @Transactional
-    public void updateAddAmount(AddStock addStock) {
+    public void updateAddAmount(AddStock addStock,int amount) {
         StockEntity stockEntity = stockEntityReader.getStockEntity(addStock);
-        stockEntity.increaseAmount(addStock.amount());
+        stockEntity.increaseAmount(amount);
     }
 
 }
