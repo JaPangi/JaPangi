@@ -22,6 +22,6 @@ public class DrinkUpdater {
     public void modifyDrink(Drink drink){
         DrinkEntity drinkEntity = drinkRepository.findById(drink.drinkInfo().drinkId())
             .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
-        drinkEntity.updateDrink(drink.drinkName(),drink.drinkPrice());
+        drinkEntity.updateDrink(drink.drinkName(),drink.drinkPrice(),drink.drinkImageUrl());
     }
 }
