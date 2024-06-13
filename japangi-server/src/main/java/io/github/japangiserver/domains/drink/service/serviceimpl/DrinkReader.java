@@ -19,9 +19,8 @@ public class DrinkReader {
     private final DrinkRepository drinkRepository;
 
     /** NOTE
-     *
-     * @param drinkId
-     * @return
+     * 음료 domain 생성 구현체
+     * @param drinkId 음료Id(PK)
      */
     @Transactional(readOnly = true)
     public Drink getDrink(Long drinkId){
@@ -29,20 +28,29 @@ public class DrinkReader {
             .map(drink -> new Drink(
                 new DrinkInfo(drinkId),
                 drink.getDrinkName(),
+                drink.getDrinkImageUrl(),
                 drink.getDrinkPrice()
             ))
             .orElseThrow(() -> new IllegalStateException("존재하지 않는 음료입니다!"));
     }
 
+    /** NOTE
+     * 음료 세부정보 조회 구현체
+     * @param drinkId 음료Id(PK)
+     */
     @Transactional(readOnly = true)
     public DrinkInfoResponse getDrinkInfo(Long drinkId) {
         Drink drink = getDrink(drinkId);
         return DrinkInfoResponse.builder()
             .drinkName(drink.drinkName())
+            .imageUrl(drink.drinkImageUrl())
             .drinkPrice(drink.drinkPrice())
             .build();
     }
 
+    /** NOTE
+     * 음료 domain list 조회 구현체
+     */
     @Transactional(readOnly = true)
     public List<Drink> getDrinkList(){
         return drinkRepository.findAll()
