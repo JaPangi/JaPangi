@@ -38,6 +38,7 @@ public class AdminValidator {
      * @param password 비말번호
      */
     public void findAdminAccount(Long adminId, String password){
+        System.out.println(adminRepository.existsByAdminIdAndPassword(adminId,password));
         if(!adminRepository.existsByAdminIdAndPassword(adminId,password)){
             throw new IllegalStateException("비밀번호가 일치하지 않습니다!");
         }

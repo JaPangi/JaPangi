@@ -46,6 +46,7 @@ public class AdminService {
         AdminPassword adminPassword,
         NewPassword newPassword
     ) {
+        System.out.println(adminId + adminPassword.password());
         adminValidator.findAdminAccount(adminId,adminPassword.password());
         adminValidator.validPassword(newPassword.newPassword());
         adminUpdater.updatePassword(adminId,newPassword.newPassword());
