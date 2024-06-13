@@ -2,8 +2,10 @@ package io.github.japangiserver.domains.stock.service.serviceimpl;
 
 import io.github.japangiserver.domains.stock.AddStock;
 import io.github.japangiserver.domains.stock.persistence.repository.StockRepository;
+import io.github.japangiserver.presentation.drink.dto.response.DrinkStatusResponse;
 import io.github.japangiserver.presentation.stock.dto.response.StockStatusResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,18 @@ public class StockReader {
         return stockRepository.findByVendingMachineId(vendingMachineId)
             .stream()
             .map(StockStatusResponse::fromEntity)
+            .toList();
+    }
+
+    /** NOTE
+     * 자판기 음료 재고 조회 구현체
+     * @param vendingMachineId 자판기 Id(PK)
+     */
+    @Transactional(readOnly = true)
+    public List<DrinkStatusResponse> getVendingMachineInfos(Long vendingMachineId){
+        return stockRepository.findByVendingMachineId(vendingMachineId)
+            .stream()
+            .map(DrinkStatusResponse::fromStockEntity)
             .toList();
     }
 }
