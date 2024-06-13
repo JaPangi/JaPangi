@@ -12,7 +12,7 @@ public record DrinkStatusResponse(
     int stock
 ) {
 
-    public static DrinkStatusResponse from(StockEntity stockEntity) {
+    public static DrinkStatusResponse fromStockEntity(StockEntity stockEntity) {
         return DrinkStatusResponse.builder()
             .drinkId(stockEntity.getDrinkEntity().getDrinkId())
             .drinkName(stockEntity.getDrinkEntity().getDrinkName())

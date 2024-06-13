@@ -4,9 +4,11 @@ import io.github.japangiserver.domains.change.serviceimpl.ChangeReader;
 import io.github.japangiserver.domains.change.serviceimpl.ChangeSaver;
 import io.github.japangiserver.domains.stock.service.serviceimpl.StockReader;
 import io.github.japangiserver.domains.stock.service.serviceimpl.StockSaver;
+import io.github.japangiserver.domains.vendingmachine.VendingMachine;
 import io.github.japangiserver.domains.vendingmachine.service.serviceimpl.VendingMachineReader;
 import io.github.japangiserver.domains.vendingmachine.service.serviceimpl.VendingMachineSaver;
 import io.github.japangiserver.presentation.change.dto.response.ChangeStatusResponse;
+import io.github.japangiserver.presentation.drink.dto.response.DrinkStatusResponse;
 import io.github.japangiserver.presentation.stock.dto.response.StockStatusResponse;
 import io.github.japangiserver.presentation.vendingmachine.dto.response.VendingMachineResponse;
 import java.util.List;
@@ -62,5 +64,14 @@ public class VendingMachineService {
      */
     public List<StockStatusResponse> showCurrentStockStatus(Long vendingMachineId) {
         return stockReader.getCurrentStockStatus(vendingMachineId);
+    }
+
+    /**
+     * NOTE
+     * 자판기 음료정보들을 보여주는 서비스
+     * @param vendingMachineId 자판기 Id(PK)
+     */
+    public List<DrinkStatusResponse> showVendingMachineInfo(Long vendingMachineId) {
+        return stockReader.getVendingMachineInfos(vendingMachineId);
     }
 }
