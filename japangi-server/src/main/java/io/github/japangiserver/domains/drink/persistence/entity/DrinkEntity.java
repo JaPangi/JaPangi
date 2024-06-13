@@ -34,8 +34,13 @@ public class DrinkEntity {
     @Column(name = "drink_img_url")
     private String drinkImageUrl;
 
-    public void updateDrink(String drinkName, Integer drinkPrice){
+    public void updateDrink(
+        String drinkName,
+        Integer drinkPrice,
+        String drinkImageUrl
+    ){
         this.drinkName = drinkName;
         this.drinkPrice = drinkPrice;
+        this.drinkImageUrl = drinkImageUrl;
     }
 }
