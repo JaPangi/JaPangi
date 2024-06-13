@@ -5,10 +5,14 @@ import SelectVendingMachine from './components/product/selectvendingmachine/Sele
 import VendingMachine from './components/product/vendingmachine/VendingMachine';
 import AdminLogin from './components/admin/AdminLogin';
 import AdminSelectVendingMachine from './components/admin/AdminSelectVendingMachine';
-import AdminStatistic from './components/admin/AdminStatistic';
 import DrinkPurchase from './components/product/vendingmachine/DrinkPurchase';
 import Changes from './components/product/vendingmachine/Change';
 import AdminPasswordChange from './components/admin/AdminPasswordChange';
+import AdminMain from './components/admin/AdminMain';
+import ManageDrink from './components/admin/manage/ManageDrink';
+import ManageChange from './components/admin/manage/ManageChange';
+import ManageStatistic from './components/admin/manage/ManageStatictic';
+import ManageDrinkDetail from './components/admin/manage/ManageDrinkDetail';
 
 function App() {
   return (
@@ -22,7 +26,12 @@ function App() {
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route path='/admin/password/change/:username' element={<AdminPasswordChange />} />
         <Route path='/admin/vendingmachine/select' element={<AdminSelectVendingMachine />} />
-        <Route path='/admin/vendingmachine/:vendingmachineId' element={<AdminStatistic />} />
+        <Route path='/admin/vendingmachine/:vendingmachineId' element={<AdminMain />} />
+
+        <Route path='/admin/vendingmachine/:vendingmachineId/manage/drink' element={<ManageDrink />} />
+        <Route path='/admin/vendingmachine/:vendingmachineId/manage/drink/:drinkId' element={<ManageDrinkDetail />} />
+        <Route path='/admin/vendingmachine/:vendingmachineId/manage/change' element={<ManageChange />} />
+        <Route path='/admin/vendingmachine/:vendingmachineId/manage/statistic' element={<ManageStatistic />} />
       </Route>
     </Routes>
   );

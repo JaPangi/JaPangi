@@ -86,7 +86,7 @@ export default function AdminLogin() {
     })
 
     useEffect(() => {
-        document.cookie = "user=unknown;"
+        window.sessionStorage.clear()
     })
 
     function handleChange(e) {
@@ -108,7 +108,8 @@ export default function AdminLogin() {
             if (res.data.status === "ERROR") {
                 alert(res.data.message)
             } else {
-                document.cookie = "user=" + res.data.data.username + ';'
+                window.sessionStorage.setItem("username", res.data.data.username)
+                window.sessionStorage.setItem("userid", res.data.data.userId)
                 navigate("/admin/vendingmachine/select")
             }
         })

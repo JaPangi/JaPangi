@@ -101,7 +101,7 @@ export default function AdminSelectVendingMachine() {
     const [vendingMachines, setVendingMachine] = useState([])
     
     useEffect(() => {
-        const user = document.cookie.match("user")["input"].substring(5)
+        const user = window.sessionStorage.getItem("username")
         setUsername(user)
 
         request("VENDING_MACHINE_ALL", null)
@@ -116,7 +116,7 @@ export default function AdminSelectVendingMachine() {
 
     const HandleAdminButtonClick = (e) => {
         if (window.confirm("Would you like to go to the admin password change page?")) {
-            navigate("/admin/password/change")
+            navigate("/admin/password/change/" + username)
         } else {
         }
     }

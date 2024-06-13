@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
+import IsAdminLoggedIn from "../../login/IsAdminLoggedIn"
 import request from "../../request/Request"
 
 const Wrapper = styled.div`
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
     flex-direction: column;
 `
 
-const Content = styled.div`
+const Content = styled.form`
     width: 350px;
     height: 400px;
     background-color: #ffffff;
@@ -82,8 +83,9 @@ export default function AdminPasswordChange() {
         confirm: "",
     })
 
+    IsAdminLoggedIn()
+
     useEffect(() => {
-        document.cookie = "user=unknown;"
     })
 
     function handleChange(e) {
@@ -93,7 +95,9 @@ export default function AdminPasswordChange() {
         })
     }
 
-    const handleSubmitButton = () => {
+    const handleSubmitButton = (e) => {
+        e.preventDefault()
+
         if (values.change !== values.confirm) {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
         }
@@ -102,9 +106,9 @@ export default function AdminPasswordChange() {
             password: values.password,
             changePassword: values.changePassword
         }
-        const targetUsername = params.username
+        const targetUserId = window.sessionStorage.getItem("userId")
         
-        request("ADMIN_PATCH_"+targetUsername, data)
+        request("ADMIN_PATCH_"+targetUserId, data)
         .then(res => {
             console.log(res.data)
         })

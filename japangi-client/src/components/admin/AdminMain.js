@@ -1,6 +1,8 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
+import request from "../../request/Request"
+import IsAdminLoggedIn from "../../login/IsAdminLoggedIn"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -69,16 +71,39 @@ const Content = styled.div`
     box-shadow: 2px 8px 12px rgba(1, 1, 1, 0.02);
     padding: 40px;
     box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
 `
 
-export default function AdminStatistic() {
+const Button = styled.button`
+    width: 43%;
+    height: 40%;
+    background-color: #ffffff;
+    border: 2px solid lightgray;
+    border-radius: 15px;
+    transition: .2s ease;
+    font-size: 24px;
+    color: gray;
+    font-weight: 500;
+
+    &:hover {
+        border: 2px solid #F69B0B;
+        transform: translateY(-1%);
+    }
+`
+
+export default function AdminMain() {
 
     const navigate = useNavigate();
     const params = useParams()
     const [username, setUsername] = useState("");
     
+    IsAdminLoggedIn()
+
     useEffect(() => {
-        const user = document.cookie.match("user")["input"].substring(5)
+        const user = window.sessionStorage.getItem("username")
         setUsername(user)
     }, [])
 
@@ -87,6 +112,17 @@ export default function AdminStatistic() {
             navigate("/admin/password/change/" + username)
         } else {
         }
+    }
+
+    const HandleLinkButtonClick = (e) => {
+        navigate("/admin/vendingmachine/" + params.vendingmachineId + "/manage/" + e.target.name)
+    }
+
+    function handleCollectButton(e) {
+        request("ADMIN_COLLECT_MONEY_" + params.vendingmachineId, null)
+        .then(res => {
+            console.log(res.data)
+        })
     }
 
     return (
@@ -99,7 +135,10 @@ export default function AdminStatistic() {
                 </ContentTitle>
             </Title>
             <Content>
-                
+                <Button name="drink" onClick={HandleLinkButtonClick}>음료 관리</Button>
+                <Button name="statistic" onClick={handleCollectButton}>수금</Button>
+                <Button name="change" onClick={HandleLinkButtonClick}>거스름돈 관리</Button>
+                <Button name="statistic" onClick={HandleLinkButtonClick}>통계 확인</Button>
             </Content>
         </Wrapper>
     )
