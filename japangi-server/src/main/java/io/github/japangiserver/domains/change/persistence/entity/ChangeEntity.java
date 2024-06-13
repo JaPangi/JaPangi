@@ -53,7 +53,9 @@ public class ChangeEntity {
             throw new IllegalStateException("잔돈이 부족합니다");
     }
 
-    public void collectMoneyByAdmin(){
+    public int collectMoneyByAdmin(){
+        int amount = this.amount;
         this.amount=5;
+        return amount-this.amount;
     }
 }

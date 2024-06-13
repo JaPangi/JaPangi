@@ -65,9 +65,8 @@ public class AdminService {
      * 관리자 수금 서비스
      * @param vendingMachineId 수금하려는 자판기Id(PK)
      */
-    public Long collectBills(Long vendingMachineId) {
-        changeUpdater.collectChange(vendingMachineId);
-        return vendingMachineId;
+    public int collectBills(Long vendingMachineId) {
+        return changeUpdater.collectChange(vendingMachineId);
     }
 
     /** NOTE
