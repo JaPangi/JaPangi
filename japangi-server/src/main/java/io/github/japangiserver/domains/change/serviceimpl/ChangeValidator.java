@@ -47,8 +47,8 @@ public class ChangeValidator {
     /** NOTE
      * 거스름돈이 남아있는지 확인하는 구현체
      */
-    public void checkChanges(Change change, int changeAmount){
+        public boolean checkChanges(Change change, int changeAmount){
         ChangeEntity changeEntity = changeEntityReader.getChangeEntity(change);
-        changeEntity.validChanges(changeAmount);
+        return changeEntity.validChanges(changeAmount);
     }
 }

@@ -48,9 +48,10 @@ public class ChangeEntity {
     public void increaseAmount(Integer amount){
         this.amount+=amount;
     }
-    public void validChanges(Integer amount){
-        if(this.amount<amount)
-            throw new IllegalStateException("잔돈이 부족합니다");
+    public boolean validChanges(Integer amount){
+        System.out.println("amount = " + amount);
+        System.out.println("this" + this.amount);
+        return this.amount >= amount;
     }
 
     public int collectMoneyByAdmin(){

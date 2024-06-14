@@ -23,7 +23,7 @@ public class StockService {
     @Transactional
     public Long putStock(AddStock addStock) {
         AddStock stock = stockReader.getStock(addStock.drinkId(), addStock.vendingMachineId());
-        stockUpdater.updateAddAmount(stock);
+        stockUpdater.updateAddAmount(stock,addStock.amount());
         return addStock.vendingMachineId();
     }
 }
