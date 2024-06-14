@@ -13,11 +13,13 @@ import ManageDrink from './components/admin/manage/ManageDrink';
 import ManageChange from './components/admin/manage/ManageChange';
 import ManageStatistic from './components/admin/manage/ManageStatictic';
 import ManageDrinkDetail from './components/admin/manage/ManageDrinkDetail';
+import Redirect from './components/main/Redirect';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Main/>} >
+        <Route path='/' element={<Redirect />} />
         <Route path='/vendingmachine/select' element={<SelectVendingMachine />} />
         <Route path='/vendingmachine/:vendingmachineId' element={<VendingMachine />} />
         <Route path='/vendingmachine/:vendingmachineId/drink/:drinkId/purchase' element={<DrinkPurchase />} />
