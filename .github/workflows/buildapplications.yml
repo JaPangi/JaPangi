@@ -69,29 +69,29 @@ jobs:
           docker build -t wwan13/japangi-relay:prod .
           docker push wwan13/japangi-relay:prod
   
-  # build-client:
-  #   if: ${{ startsWith(github.event.comment.body, '[build]') }}
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: ./japangi-client
+  build-client:
+    if: ${{ startsWith(github.event.comment.body, '[build]') }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./japangi-client
 
-  #   steps:
-  #   - uses: actions/checkout@v3
+    steps:
+    - uses: actions/checkout@v3
       
-  #   - name: install npm dependencies
-  #     run: npm install
+    - name: install npm dependencies
+      run: npm install
     
-  #   - name: build client application
-  #     run: npm run build
+    - name: build client application
+      run: npm run build
 
-  #   - name: login docker
-  #     uses: docker/login-action@v2
-  #     with:
-  #       username: ${{ secrets.DOCKERHUB_EMAIL }}
-  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: login docker
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_EMAIL }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #   - name: docker build and push to hub client applicaiton
-  #     run: |
-  #       docker build -t wwan13/japangi-client:prod .
-  #       docker push wwan13/japangi-client:prod
+    - name: docker build and push to hub client applicaiton
+      run: |
+        docker build -t wwan13/japangi-client:prod .
+        docker push wwan13/japangi-client:prod

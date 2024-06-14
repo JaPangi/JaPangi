@@ -14,5 +14,6 @@ export default function request(key, body) {
         'Access-Control-Allow-Credentials':"true",
     }
 
-    return axios.post("http://127.0.0.1:8060/relay", data, headers)
+    const basedUrl = "http://" + process.env.REACT_APP_TARGET_SERVER_HOST + ":" + process.env.REACT_APP_TARGET_SERVER_PORT
+    return axios.post(basedUrl + "/relay", data, headers)
 }
