@@ -290,11 +290,6 @@ export default function ManageStatictic() {
                 </MonthTitleWrap>
                 <Total>Total Order Amount: {totalAmount}, Total Price: ￦ {totalPrice}</Total>
                 <StatisticWrap>
-                    {/* {
-                        values.map(e => {
-                            return <StatisticElement>asdasd</ StatisticElement>
-                        })
-                    } */}
                     <Calendar year={year} month={month} data={values} />
                 </StatisticWrap>
             </Content>

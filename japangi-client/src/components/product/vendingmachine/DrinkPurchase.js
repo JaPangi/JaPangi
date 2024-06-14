@@ -278,9 +278,11 @@ export default function DrinkPurchase(props) {
                 queryString += c.value + "=" + c.amount + "&"
             })
             queryString = queryString.substring(0, queryString.length-1)
-            navigate("/vendingmachine/" + params.vendingmachineId + "/change?" + queryString)
+            navigate("/vendingmachine/" + params.vendingmachineId + "/change?" + queryString) 
         })
     }
+
+    const Monies = [10, 50, 100, 500, 1000]
 
     return (
         <Wrapper>
@@ -299,61 +301,22 @@ export default function DrinkPurchase(props) {
                         <InputStateBox>
                             ￦ {totalPrice}
                         </InputStateBox>
-                        
-                        <InputBox>
-                            <CoinDetail>
-                                ￦ 10
-                            </CoinDetail>
-                            <CoinInput>
-                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
-                                <CoinAmountState>{moneyInput[10]}</CoinAmountState>
-                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
-                            </CoinInput>
-                        </InputBox>
-
-                        <InputBox>
-                            <CoinDetail>
-                                ￦ 50
-                            </CoinDetail>
-                            <CoinInput>
-                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
-                                <CoinAmountState>{moneyInput[50]}</CoinAmountState>
-                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
-                            </CoinInput>
-                        </InputBox>
-
-                        <InputBox>
-                            <CoinDetail>
-                                ￦ 100
-                            </CoinDetail>
-                            <CoinInput>
-                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
-                                <CoinAmountState>{moneyInput[100]}</CoinAmountState>
-                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
-                            </CoinInput>
-                        </InputBox>
-
-                        <InputBox>
-                            <CoinDetail>
-                                ￦ 500
-                            </CoinDetail>
-                            <CoinInput>
-                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
-                                <CoinAmountState>{moneyInput[500]}</CoinAmountState>
-                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
-                            </CoinInput>
-                        </InputBox>
-
-                        <InputBox>
-                            <CoinDetail>
-                                ￦ 1000
-                            </CoinDetail>
-                            <CoinInput>
-                                <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
-                                <CoinAmountState>{moneyInput[1000]}</CoinAmountState>
-                                <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
-                            </CoinInput>
-                        </InputBox>
+                        {
+                            Monies.map(m => {
+                                return (
+                                    <InputBox>
+                                        <CoinDetail>
+                                            ￦ {m}
+                                        </CoinDetail>
+                                        <CoinInput>
+                                            <CoinInputButton onClick={handleMoneyInputButton}>-</CoinInputButton>
+                                            <CoinAmountState>{moneyInput[m]}</CoinAmountState>
+                                            <CoinInputButton onClick={handleMoneyInputButton}>+</CoinInputButton>
+                                        </CoinInput>
+                                    </InputBox>
+                                )
+                            })
+                        }
                     </InsertCoinsWrapper>
                 </ContentsWrapper>
 

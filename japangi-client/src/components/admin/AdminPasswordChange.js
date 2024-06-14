@@ -102,18 +102,22 @@ export default function AdminPasswordChange() {
             alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
         }
 
+        console.log(values.original)
+
         const data = {
-            password: values.password,
-            changePassword: values.changePassword
+            password: values.original,
+            changePassword: values.change
         }
-        const targetUserId = window.sessionStorage.getItem("userId")
+        const targetUserId = window.sessionStorage.getItem("userid")
         
         request("ADMIN_PATCH_"+targetUserId, data)
         .then(res => {
-            console.log(res.data)
+            if (res.data.status == "ERROR") {
+                alert(res.data.message)
+            }
+            alert("비밀번호가 변경되었습니다.")
+            navigate("/admin/login")
         })
-
-        navigate("/admin/login")
     }
 
     return (
@@ -121,14 +125,14 @@ export default function AdminPasswordChange() {
             <Title>Change Password</Title>
             <Content>
                 <Description>original password</Description>
-                <InputBox type={"password"} name={"original"} onChange={handleChange} />
+                <InputBox type={"password"} name={"original"} onChange={handleChange} value={values.original} />
 
                 <Empty />
 
                 <Description>change password</Description>
-                <InputBox type={"password"} name={"change"} onChange={handleChange} />
+                <InputBox type={"password"} name={"change"} onChange={handleChange} value={values.change} />
                 <Description>password confirm</Description>
-                <InputBox type={"password"} name={"confirm"} onChange={handleChange} />
+                <InputBox type={"password"} name={"confirm"} onChange={handleChange} value={values.confirm} />
                 <SubmitButton onClick={handleSubmitButton}>Submit</SubmitButton>
             </Content>
         </Wrapper>
